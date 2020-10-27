@@ -1,42 +1,29 @@
 const express = require("express");
 const router = express.Router();
+const { check, validationResult } = require("express-validator");
 
-// @route   GET api/cards
+// @route   GET /api/cards?boardId=xx&columnId=yy
 // @desc    Get all users cards
 // @access  Private
 router.get("/", (req, res) => {
   res.send("Get all cards");
 });
 
-// @route   GET api/cards/:type
-// @desc    Get all users cards in type
-// @access  Private
-router.get("/:type", (req, res) => {
-  res.send("Get all cards in type");
-});
-
-// @route   POST api/cards
+// @route   POST api/cards {boardId, columnId}
 // @desc    Add new card
 // @access  Private
 router.post("/", (req, res) => {
   res.send("Add new card");
 });
 
-// @route   PUT api/cards/:id
+// @route   PUT api/cards/:id {boardId, columnId}
 // @desc    Update card
 // @access  Private
 router.put("/:id", (req, res) => {
   res.send("Update card");
 });
 
-// @route   PUT api/cards/:id/:type1/:type2
-// @desc    Move card
-// @access  Private
-router.put("/:id/:type1/:type2", (req, res) => {
-  res.send("Move card");
-});
-
-// @route   DELETE api/cards/:id
+// @route   DELETE api/cards/:id {boardId, columnId}
 // @desc    Delete card
 // @access  Private
 router.delete("/:id", (req, res) => {
