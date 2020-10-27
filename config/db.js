@@ -8,8 +8,6 @@ const db = config
   .replace("<password>", process.env.MONGODB_PASSWORD)
   .replace("<dbname>", process.env.MONGODB_DATABASE_NAME);
 
-console.log(db);
-
 const connectDB = async () => {
   try {
     await mongoose.connect(db, {

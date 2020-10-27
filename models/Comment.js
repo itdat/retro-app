@@ -7,10 +7,10 @@ const voteSchema = mongoose.Schema({
   },
 });
 
-const CardSchema = mongoose.Schema({
-  column: {
+const CommentSchema = mongoose.Schema({
+  card: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "columns",
+    ref: "cards",
   },
   content: {
     type: String,
@@ -30,4 +30,4 @@ const CardSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("card", CardSchema);
+module.exports = mongoose.model("comment", CommentSchema);
