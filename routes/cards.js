@@ -7,7 +7,12 @@ const Card = require("../models/Card");
 // @desc    Get all users cards
 // @access  Private
 router.get("/", async (req, res) => {
-  const cards = await Card.find();
+  let cards = [];
+  if (req.query.columnId) {
+    cards = await Card.find({ column: req.query.columnId });
+  } else {
+    cards = await Card.find();
+  }
   res.json(cards);
 });
 

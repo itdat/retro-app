@@ -45,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(8),
   },
   card: {
-    height: "100%",
     margin: "1rem",
   },
   cardMedia: {
@@ -62,11 +61,26 @@ const useStyles = makeStyles((theme) => ({
 
 export default function App() {
   const classes = useStyles();
-  const [cards, setCards] = useState([]);
+
+  const columns = [
+    { id: "5f989c840bbf02e009d9ae7e", name: "Went Well", color: "#009688" },
+    { id: "5f989cdd0bbf02e009d9ae7f", name: "To Improve", color: "#e91e63" },
+    { id: "5f989d140bbf02e009d9ae80", name: "Action Items", color: "#9c27b0" },
+  ];
+
+  const [wentWell, setWentWell] = useState([]);
+  const [toImprove, setToImprove] = useState([]);
+  const [actionItems, setActionItems] = useState([]);
 
   useEffect(async () => {
-    const res = await axios.get("/api/cards");
-    setCards(res.data);
+    const res1 = await axios.get(`/api/cards?columnId=${columns[0].id}`);
+    setWentWell(res1.data);
+    const res2 = await axios.get(`/api/cards?columnId=${columns[1].id}`);
+    setToImprove(res2.data);
+    const res3 = await axios.get(`/api/cards?columnId=${columns[2].id}`);
+    setActionItems(res3.data);
+
+    console.log(wentWell);
   }, []);
 
   return (
@@ -79,7 +93,12 @@ export default function App() {
           <Grid container spacing={1}>
             {/* Went Well */}
             <Grid item xs={4} container wrap="nowrap" direction="column">
-              {cards.map((card) => {
+              <Box bgcolor="success.main" p={3}>
+                <Typography variant="h6" align="center" color="textPrimary">
+                  {columns[0].name}
+                </Typography>
+              </Box>
+              {wentWell.map((card) => {
                 return (
                   <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
@@ -106,7 +125,12 @@ export default function App() {
 
             {/* To Improve */}
             <Grid item xs={4} container wrap="nowrap" direction="column">
-              {cards.map((card) => {
+              <Box bgcolor="info.main" p={3}>
+                <Typography variant="h6" align="center" color="textPrimary">
+                  {columns[1].name}
+                </Typography>
+              </Box>
+              {toImprove.map((card) => {
                 return (
                   <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
@@ -133,7 +157,12 @@ export default function App() {
 
             {/* To Improve */}
             <Grid item xs={4} container wrap="nowrap" direction="column">
-              {cards.map((card) => {
+              <Box bgcolor="warning.main" p={3}>
+                <Typography variant="h6" align="center" color="textPrimary">
+                  {columns[2].name}
+                </Typography>
+              </Box>
+              {actionItems.map((card) => {
                 return (
                   <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
