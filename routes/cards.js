@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
+const Card = require("../models/Card");
 
 // @route   GET /api/cards?boardId=xx&columnId=yy
 // @desc    Get all users cards
 // @access  Private
-router.get("/", (req, res) => {
-  res.send("Get all cards");
+router.get("/", async (req, res) => {
+  const cards = await Card.find();
+  res.json(cards);
 });
 
 // @route   POST api/cards {boardId, columnId}

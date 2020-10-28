@@ -1,12 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
+const Board = require("../models/Board");
 
 // @route   GET api/boards
 // @desc    Get all users boards
 // @access  Private
-router.get("/", (req, res) => {
-  res.send("Get all boards");
+router.get("/", async (req, res) => {
+  try {
+    const boards = await Board.find();
+    res.json(boards);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error...");
+  }
 });
 
 // @route   POST api/boards
