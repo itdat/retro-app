@@ -46,8 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     height: "100%",
-    display: "flex",
-    flexDirection: "column",
+    margin: "1rem",
   },
   cardMedia: {
     paddingTop: "56.25%", // 16:9
@@ -76,12 +75,12 @@ export default function App() {
       <Navbar />
 
       <main>
-        <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
-          <Box container flexDirection="row">
-            {cards.map((card) => {
-              return (
-                <Grid item key={card._id} xs={12} sm={6} md={4}>
+        <Container maxWidth="md">
+          <Grid container spacing={1}>
+            {/* Went Well */}
+            <Grid item xs={4} container wrap="nowrap" direction="column">
+              {cards.map((card) => {
+                return (
                   <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="h2">
@@ -101,14 +100,14 @@ export default function App() {
                       </Button>
                     </CardActions>
                   </Card>
-                </Grid>
-              );
-            })}
-          </Box>
-          <Box>
-            {cards.map((card) => {
-              return (
-                <Grid item key={card._id} xs={12} sm={6} md={4}>
+                );
+              })}
+            </Grid>
+
+            {/* To Improve */}
+            <Grid item xs={4} container wrap="nowrap" direction="column">
+              {cards.map((card) => {
+                return (
                   <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="h2">
@@ -128,10 +127,37 @@ export default function App() {
                       </Button>
                     </CardActions>
                   </Card>
-                </Grid>
-              );
-            })}
-          </Box>
+                );
+              })}
+            </Grid>
+
+            {/* To Improve */}
+            <Grid item xs={4} container wrap="nowrap" direction="column">
+              {cards.map((card) => {
+                return (
+                  <Card className={classes.card}>
+                    <CardContent className={classes.cardContent}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {card.content}
+                      </Typography>
+                      <Typography>
+                        This is a media card. You can use this section to
+                        describe the content.
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small" color="primary">
+                        View
+                      </Button>
+                      <Button size="small" color="primary">
+                        Edit
+                      </Button>
+                    </CardActions>
+                  </Card>
+                );
+              })}
+            </Grid>
+          </Grid>
         </Container>
       </main>
       {/* Footer */}
