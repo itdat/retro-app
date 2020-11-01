@@ -55,15 +55,23 @@ export default function App() {
   const [toImprove, setToImprove] = useState([]);
   const [actionItems, setActionItems] = useState([]);
 
-  useEffect(async () => {
-    const res1 = await axios.get(`/api/cards?columnId=${columns[0].id}`);
-    setWentWell(res1.data);
-    const res2 = await axios.get(`/api/cards?columnId=${columns[1].id}`);
-    setToImprove(res2.data);
-    const res3 = await axios.get(`/api/cards?columnId=${columns[2].id}`);
-    setActionItems(res3.data);
-
-    console.log(wentWell);
+  useEffect(() => {
+    const fetchData = async () => {
+      const wentWellRes = await axios.get(
+        `/api/cards?columnId=${columns[0].id}`
+      );
+      setWentWell(wentWellRes.data);
+      const toImproveRes = await axios.get(
+        `/api/cards?columnId=${columns[1].id}`
+      );
+      setToImprove(toImproveRes.data);
+      const actionItemsRes = await axios.get(
+        `/api/cards?columnId=${columns[2].id}`
+      );
+      setActionItems(actionItemsRes.data);
+    };
+    fetchData();
+    // eslint-disable-next-line
   }, []);
 
   return (
