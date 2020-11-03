@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Button, Grid } from "@material-ui/core";
+import { Avatar, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   flex: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   toolbarMargin: theme.mixins.toolbar,
 }));
 
-const Navbar = () => {
+const NavBar = ({ openDrawer }) => {
   const classes = useStyles();
   return (
     <Appbar position="relative">
@@ -32,6 +32,7 @@ const Navbar = () => {
           className={classes.iconBtn}
           color="inherit"
           aria-label="Menu"
+          onClick={openDrawer}
         >
           <MenuIcon />
         </IconButton>
@@ -53,4 +54,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavBar;

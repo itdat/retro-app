@@ -10,10 +10,11 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import Navbar from "./components/layout/Navbar";
+import NavBar from "./components/layout/NavBar";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import LeftDrawer from "./components/layout/LeftDrawer";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -44,12 +45,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function App() {
   const classes = useStyles();
-
   const columns = [
     { id: "5f989c840bbf02e009d9ae7e", name: "Went Well", color: "#009688" },
     { id: "5f989cdd0bbf02e009d9ae7f", name: "To Improve", color: "#e91e63" },
     { id: "5f989d140bbf02e009d9ae80", name: "Action Items", color: "#9c27b0" },
   ];
+  const [open, setOpen] = useState(false);
 
   const [wentWell, setWentWell] = useState([]);
   const [toImprove, setToImprove] = useState([]);
@@ -77,9 +78,10 @@ export default function App() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Navbar />
-
+      <NavBar openDrawer={() => setOpen(!open)} />
       <main>
+        <LeftDrawer open={open} setOpen={setOpen} />
+
         <Container maxWidth="md">
           <Grid container spacing={1}>
             {/* Went Well */}
