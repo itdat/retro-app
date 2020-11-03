@@ -13,12 +13,13 @@ const CardColumn = ({ title, cards, setCards, classes }) => {
 
   useEffect(() => {
     if (confirm && confirm.result === true) {
-      const delCards = cards.filter(
+      const remainCards = cards.filter(
         (card) => card._id !== confirm.message.idCard
       );
-      setCards(delCards);
+      setCards(remainCards);
       hideConfirm();
     }
+    // eslint-disable-next-line
   }, [confirm, cards]);
 
   return (
@@ -28,8 +29,8 @@ const CardColumn = ({ title, cards, setCards, classes }) => {
           {title}
         </Typography>
       </Card>
-      {cards.map((card, i) => {
-        return <RetroCard key={i} card={card} />;
+      {cards.map((card) => {
+        return <RetroCard key={card._id} card={card} />;
       })}
     </Grid>
   );
