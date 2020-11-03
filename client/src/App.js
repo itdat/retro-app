@@ -83,19 +83,19 @@ export default function App() {
                 title="Went Well"
                 cards={wentWell}
                 setCards={setWentWell}
-                classes={clsx(classes.columnTitle, classes.wentWell)}
+                columnClasses={clsx(classes.columnTitle, classes.wentWell)}
               />
               <CardColumn
                 title="To Improve"
                 cards={toImprove}
                 setCards={setToImprove}
-                classes={clsx(classes.columnTitle, classes.toImprove)}
+                columnClasses={clsx(classes.columnTitle, classes.toImprove)}
               />
               <CardColumn
                 title="Action Items"
                 cards={actionItems}
                 setCards={setActionItems}
-                classes={clsx(classes.columnTitle, classes.actionItems)}
+                columnClasses={clsx(classes.columnTitle, classes.actionItems)}
               />
             </Grid>
           </Container>
