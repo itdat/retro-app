@@ -2,28 +2,54 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import clsx from "clsx";
 
 import NavBar from "./components/layout/NavBar";
 import LeftDrawer from "./components/layout/LeftDrawer";
-import RetroCard from "./components/cards/RetroCard";
+import CardColumn from "./components/cards/CardColumn";
+
+const useStyles = makeStyles((theme) => ({
+  columnTitle: {
+    marginTop: "0.2rem",
+    padding: "2rem",
+  },
+  wentWell: {
+    backgroundColor: theme.palette.success.main,
+    color: theme.palette.text.primary,
+  },
+  toImprove: {
+    backgroundColor: theme.palette.warning.main,
+    color: theme.palette.text.primary,
+  },
+  actionItems: {
+    backgroundColor: theme.palette.info.main,
+    color: theme.palette.text.primary,
+  },
+}));
 
 export default function App() {
+  const classes = useStyles();
+
+  // Card column Ids
   const columns = [
-    { id: "5f989c840bbf02e009d9ae7e", name: "Went Well", color: "#009688" },
-    { id: "5f989cdd0bbf02e009d9ae7f", name: "To Improve", color: "#e91e63" },
-    { id: "5f989d140bbf02e009d9ae80", name: "Action Items", color: "#9c27b0" },
+    { id: "5f989c840bbf02e009d9ae7e" },
+    { id: "5f989cdd0bbf02e009d9ae7f" },
+    { id: "5f989d140bbf02e009d9ae80" },
   ];
+
+  // Drawer state
   const [open, setOpen] = useState(false);
 
+  // Card columns state
   const [wentWell, setWentWell] = useState([]);
   const [toImprove, setToImprove] = useState([]);
   const [actionItems, setActionItems] = useState([]);
 
+  // Fetch data when components did mount
   useEffect(() => {
     const fetchData = async () => {
       const wentWellRes = await axios.get(
@@ -51,60 +77,21 @@ export default function App() {
         <LeftDrawer open={open} setOpen={setOpen} />
         <Container maxWidth="md">
           <Grid container spacing={1}>
-            {/* Went Well */}
-            <Grid
-              item
-              xs={12}
-              md={4}
-              container
-              wrap="nowrap"
-              direction="column"
-            >
-              <Box bgcolor="success.main" p={3}>
-                <Typography variant="h6" align="center" color="textPrimary">
-                  {columns[0].name}
-                </Typography>
-              </Box>
-              {wentWell.map((card) => {
-                return <RetroCard card={card} />;
-              })}
-            </Grid>
-            {/* To Improve */}
-            <Grid
-              item
-              xs={12}
-              md={4}
-              container
-              wrap="nowrap"
-              direction="column"
-            >
-              <Box bgcolor="info.main" p={3}>
-                <Typography variant="h6" align="center" color="textPrimary">
-                  {columns[1].name}
-                </Typography>
-              </Box>
-              {toImprove.map((card) => {
-                return <RetroCard card={card} />;
-              })}
-            </Grid>
-            {/* Action Items */}
-            <Grid
-              item
-              xs={12}
-              md={4}
-              container
-              wrap="nowrap"
-              direction="column"
-            >
-              <Box bgcolor="warning.main" p={3}>
-                <Typography variant="h6" align="center" color="textPrimary">
-                  {columns[2].name}
-                </Typography>
-              </Box>
-              {actionItems.map((card) => {
-                return <RetroCard card={card} />;
-              })}
-            </Grid>
+            <CardColumn
+              title="Went Well"
+              cards={wentWell}
+              classes={clsx(classes.columnTitle, classes.wentWell)}
+            />
+            <CardColumn
+              title="To Improve"
+              cards={toImprove}
+              classes={clsx(classes.columnTitle, classes.toImprove)}
+            />
+            <CardColumn
+              title="Action Items"
+              cards={actionItems}
+              classes={clsx(classes.columnTitle, classes.actionItems)}
+            />
           </Grid>
         </Container>
       </main>
