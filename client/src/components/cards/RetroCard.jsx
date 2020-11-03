@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import { Hidden, TextField } from "@material-ui/core";
+import DeleteForever from "@material-ui/icons/DeleteForever";
+import { Grid, Hidden, IconButton, TextField } from "@material-ui/core";
+
+import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -14,9 +17,15 @@ const useStyles = makeStyles((theme) => ({
   cardContent: {
     flexGrow: 1,
   },
+  content: {
+    flex: 1,
+  },
 }));
 
 const RetroCard = ({ card }) => {
+  const confirmDialogContext = useContext(ConfirmDialogContext);
+  const { showConfirm } = confirmDialogContext;
+
   const classes = useStyles();
 
   const [edit, setEdit] = useState(false);
@@ -30,15 +39,37 @@ const RetroCard = ({ card }) => {
     setEdit(!edit);
   };
 
+  const handleDelete = (e) => {
+    showConfirm({
+      title: "Confirm delete operation",
+      content: "Are you sure to delete this card?",
+      idCard: card._id,
+    });
+  };
+
   return (
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
         {edit ? (
-          <TextField multiline value={value} onChange={handleChange} />
+          <TextField
+            fullWidth
+            multiline
+            value={value}
+            onChange={handleChange}
+          />
         ) : (
-          <Typography multiline style={{ whiteSpace: "pre-line" }}>
-            {value}
-          </Typography>
+          <Grid container>
+            <Grid item className={classes.content}>
+              <Typography style={{ whiteSpace: "pre-line" }}>
+                {value}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <IconButton size="small" onClick={handleDelete}>
+                <DeleteForever color="error" />
+              </IconButton>
+            </Grid>
+          </Grid>
         )}
       </CardContent>
       <CardActions>

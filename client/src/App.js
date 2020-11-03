@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,6 +10,8 @@ import clsx from "clsx";
 import NavBar from "./components/layout/NavBar";
 import LeftDrawer from "./components/layout/LeftDrawer";
 import CardColumn from "./components/cards/CardColumn";
+import ConfirmDialog from "./components/notification/ConfirmDialog";
+import ConfirmDialogState from "./context/confirmDialog/ConfirmDialogState";
 
 const useStyles = makeStyles((theme) => ({
   columnTitle: {
@@ -42,7 +43,7 @@ export default function App() {
   ];
 
   // Drawer state
-  const [open, setOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Card columns state
   const [wentWell, setWentWell] = useState([]);
@@ -70,31 +71,37 @@ export default function App() {
   }, []);
 
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <NavBar openDrawer={() => setOpen(!open)} />
-      <main>
-        <LeftDrawer open={open} setOpen={setOpen} />
-        <Container maxWidth="md">
-          <Grid container spacing={1}>
-            <CardColumn
-              title="Went Well"
-              cards={wentWell}
-              classes={clsx(classes.columnTitle, classes.wentWell)}
-            />
-            <CardColumn
-              title="To Improve"
-              cards={toImprove}
-              classes={clsx(classes.columnTitle, classes.toImprove)}
-            />
-            <CardColumn
-              title="Action Items"
-              cards={actionItems}
-              classes={clsx(classes.columnTitle, classes.actionItems)}
-            />
-          </Grid>
-        </Container>
-      </main>
-    </React.Fragment>
+    <ConfirmDialogState>
+      <React.Fragment>
+        <CssBaseline />
+        <NavBar openDrawer={() => setDrawerOpen(!drawerOpen)} />
+        <main>
+          <LeftDrawer open={drawerOpen} setOpen={setDrawerOpen} />
+          <Container maxWidth="md">
+            <Grid container spacing={1}>
+              <CardColumn
+                title="Went Well"
+                cards={wentWell}
+                setCards={setWentWell}
+                classes={clsx(classes.columnTitle, classes.wentWell)}
+              />
+              <CardColumn
+                title="To Improve"
+                cards={toImprove}
+                setCards={setToImprove}
+                classes={clsx(classes.columnTitle, classes.toImprove)}
+              />
+              <CardColumn
+                title="Action Items"
+                cards={actionItems}
+                setCards={setActionItems}
+                classes={clsx(classes.columnTitle, classes.actionItems)}
+              />
+            </Grid>
+          </Container>
+          <ConfirmDialog />
+        </main>
+      </React.Fragment>
+    </ConfirmDialogState>
   );
 }
