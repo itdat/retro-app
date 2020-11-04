@@ -101,10 +101,12 @@ const AuthState = (props) => {
         isAuthenticated: state.isAuthenticated,
         loading: state.loading,
         user: state.user,
-        token: state.token,
         error: state.user,
         loadUser,
         register,
+        login,
+        logout,
+        clearErrors,
       }}
     >
       {props.children}

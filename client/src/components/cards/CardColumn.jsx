@@ -38,8 +38,6 @@ const CardColumn = ({ title, cards, setCards, columnClasses }) => {
     // eslint-disable-next-line
   }, [confirm, cards]);
 
-  const handleAddCard = () => {};
-
   return (
     <Grid item xs={12} md={4} container wrap="nowrap" direction="column">
       <Card className={columnClasses}>
