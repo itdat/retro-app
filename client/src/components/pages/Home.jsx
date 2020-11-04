@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CardColumn from "../cards/CardColumn";
 import CardsContext from "../../context/cards/cardsContext";
+import AuthContext from "../../context/auth/authContext";
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
 import { CONFIRM_DELETE_CARD } from "../notification/types";
 const useStyles = makeStyles((theme) => ({
@@ -29,6 +30,7 @@ const Home = () => {
   const classes = useStyles();
 
   const cardsContext = useContext(CardsContext);
+  const authContext = useContext(AuthContext);
   const confirmDialogContext = useContext(ConfirmDialogContext);
 
   const {
@@ -41,7 +43,10 @@ const Home = () => {
 
   const { hideConfirm, confirm } = confirmDialogContext;
 
+  const { loadUser } = authContext;
+
   useEffect(() => {
+    loadUser();
     getCards();
     // eslint-disable-next-line
   }, []);

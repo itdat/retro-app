@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -17,6 +17,9 @@ import SignIn from "./components/auth/SignIn";
 import Alerts from "./components/layout/Alerts";
 import Home from "./components/pages/Home";
 import CardsState from "./context/cards/CardsState";
+import setAuthToken from "./utils/setAuthToken";
+
+setAuthToken(localStorage.token);
 
 export default function App() {
   // Drawer state
