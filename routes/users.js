@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 // @route   POST api/users
@@ -11,7 +12,7 @@ router.post(
   "/",
   [
     check("name", "Please add name").not().isEmpty(),
-    check("email", "Please include a valid email").isEmail(),
+    check("username", "Please include a valid username").not().isEmpty(),
     check(
       "password",
       "Please enter a password with 6 or more characters"
@@ -23,10 +24,10 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
+    const { name, username, password } = req.body;
 
     try {
-      let user = await User.findOne({ email });
+      let user = await User.findOne({ username });
 
       if (user) {
         return res.status(400).json({ msg: "User already exists" });
@@ -34,14 +35,31 @@ router.post(
 
       user = new User({
         name,
-        email,
+        username,
         password,
       });
 
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
       await user.save();
-      res.send("User saved!");
+
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        {
+          expiresIn: 3600000,
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
     } catch (err) {
       console.log(err.message);
       res.status(500).send("Server error...");
