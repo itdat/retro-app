@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,6 +13,10 @@ import LeftDrawer from "./components/layout/LeftDrawer";
 import CardColumn from "./components/cards/CardColumn";
 import ConfirmDialog from "./components/notification/ConfirmDialog";
 import ConfirmDialogState from "./context/confirmDialog/ConfirmDialogState";
+import AuthState from "./context/auth/AuthState";
+
+import SignUp from "./components/auth/SignUp";
+import SignIn from "./components/auth/SignIn";
 
 const useStyles = makeStyles((theme) => ({
   columnTitle: {
@@ -35,13 +40,6 @@ const useStyles = makeStyles((theme) => ({
 export default function App() {
   const classes = useStyles();
 
-  // Card column Ids
-  const columns = [
-    { id: "5f989c840bbf02e009d9ae7e" },
-    { id: "5f989cdd0bbf02e009d9ae7f" },
-    { id: "5f989d140bbf02e009d9ae80" },
-  ];
-
   // Drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -54,15 +52,15 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       const wentWellRes = await axios.get(
-        `/api/cards?columnId=${columns[0].id}`
+        `/api/cards?board=5fa24556601b321aa80ee16c&column=wentWell`
       );
       setWentWell(wentWellRes.data);
       const toImproveRes = await axios.get(
-        `/api/cards?columnId=${columns[1].id}`
+        `/api/cards?board=5fa24556601b321aa80ee16c&column=toImprove`
       );
       setToImprove(toImproveRes.data);
       const actionItemsRes = await axios.get(
-        `/api/cards?columnId=${columns[2].id}`
+        `/api/cards?board=5fa24556601b321aa80ee16c&column=actionItems`
       );
       setActionItems(actionItemsRes.data);
     };
@@ -71,37 +69,60 @@ export default function App() {
   }, []);
 
   return (
-    <ConfirmDialogState>
-      <React.Fragment>
-        <CssBaseline />
-        <NavBar openDrawer={() => setDrawerOpen(!drawerOpen)} />
-        <main>
-          <LeftDrawer open={drawerOpen} setOpen={setDrawerOpen} />
-          <Container maxWidth="md">
-            <Grid container spacing={1}>
-              <CardColumn
-                title="Went Well"
-                cards={wentWell}
-                setCards={setWentWell}
-                columnClasses={clsx(classes.columnTitle, classes.wentWell)}
-              />
-              <CardColumn
-                title="To Improve"
-                cards={toImprove}
-                setCards={setToImprove}
-                columnClasses={clsx(classes.columnTitle, classes.toImprove)}
-              />
-              <CardColumn
-                title="Action Items"
-                cards={actionItems}
-                setCards={setActionItems}
-                columnClasses={clsx(classes.columnTitle, classes.actionItems)}
-              />
-            </Grid>
-          </Container>
-          <ConfirmDialog />
-        </main>
-      </React.Fragment>
-    </ConfirmDialogState>
+    <Router>
+      <AuthState>
+        <ConfirmDialogState>
+          <React.Fragment>
+            <CssBaseline />
+            <NavBar openDrawer={() => setDrawerOpen(!drawerOpen)} />
+            <main>
+              <LeftDrawer open={drawerOpen} setOpen={setDrawerOpen} />
+              <Container maxWidth="md">
+                <Switch>
+                  <Route
+                    exact
+                    path="/"
+                    render={() => (
+                      <Grid container spacing={1}>
+                        <CardColumn
+                          title="Went Well"
+                          cards={wentWell}
+                          setCards={setWentWell}
+                          columnClasses={clsx(
+                            classes.columnTitle,
+                            classes.wentWell
+                          )}
+                        />
+                        <CardColumn
+                          title="To Improve"
+                          cards={toImprove}
+                          setCards={setToImprove}
+                          columnClasses={clsx(
+                            classes.columnTitle,
+                            classes.toImprove
+                          )}
+                        />
+                        <CardColumn
+                          title="Action Items"
+                          cards={actionItems}
+                          setCards={setActionItems}
+                          columnClasses={clsx(
+                            classes.columnTitle,
+                            classes.actionItems
+                          )}
+                        />
+                      </Grid>
+                    )}
+                  />
+                  <Route exact path="/sign-up" component={SignUp} />
+                  <Route exact path="/sign-in" component={SignIn} />
+                </Switch>
+              </Container>
+              <ConfirmDialog />
+            </main>
+          </React.Fragment>
+        </ConfirmDialogState>
+      </AuthState>
+    </Router>
   );
 }

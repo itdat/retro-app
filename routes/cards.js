@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 // @route   GET /api/cards?board=...&column=...
 // @desc    Get all users cards
 // @access  Private
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   if (!req.query.board || !req.query.column) {
     return res.status(400).send("Bad request");
   }

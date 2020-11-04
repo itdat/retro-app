@@ -1,3 +1,14 @@
 export const SET_CONFIRM_DIALOG = "SET_CONFIRM_DIALOG";
 export const CONFIRM_DIALOG = "CONFIRM_DIALOG";
 export const CANCEL_DIALOG = "CANCEL_DIALOG";
+export const ADD_BOARD = "ADD_BOARD";
+export const DELETE_BOARD = "DELETE_BOARD";
+export const UPDATE_BOARD = "UPDATE_BOARD";
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const REGISTER_FAIL = "REGISTER_FAIL";
+export const USER_LOADED = "USER_LOADED";
+export const AUTH_ERROR = "AUTH_ERROR";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAIL = "LOGIN_FAIL";
+export const LOGOUT = "LOGOUT";
+export const CLEAR_ERRORS = "CLEAR_ERRORS";
