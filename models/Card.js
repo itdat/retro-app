@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const CardSchema = mongoose.Schema({
-  boardId: {
+  board: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: "boards",
   },
