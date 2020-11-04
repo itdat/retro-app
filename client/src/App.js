@@ -14,9 +14,11 @@ import CardColumn from "./components/cards/CardColumn";
 import ConfirmDialog from "./components/notification/ConfirmDialog";
 import ConfirmDialogState from "./context/confirmDialog/ConfirmDialogState";
 import AuthState from "./context/auth/AuthState";
+import AlertState from "./context/alert/AlertState";
 
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
+import Alerts from "./components/layout/Alerts";
 
 const useStyles = makeStyles((theme) => ({
   columnTitle: {
@@ -71,57 +73,60 @@ export default function App() {
   return (
     <Router>
       <AuthState>
-        <ConfirmDialogState>
-          <React.Fragment>
-            <CssBaseline />
-            <NavBar openDrawer={() => setDrawerOpen(!drawerOpen)} />
-            <main>
-              <LeftDrawer open={drawerOpen} setOpen={setDrawerOpen} />
-              <Container maxWidth="md">
-                <Switch>
-                  <Route
-                    exact
-                    path="/"
-                    render={() => (
-                      <Grid container spacing={1}>
-                        <CardColumn
-                          title="Went Well"
-                          cards={wentWell}
-                          setCards={setWentWell}
-                          columnClasses={clsx(
-                            classes.columnTitle,
-                            classes.wentWell
-                          )}
-                        />
-                        <CardColumn
-                          title="To Improve"
-                          cards={toImprove}
-                          setCards={setToImprove}
-                          columnClasses={clsx(
-                            classes.columnTitle,
-                            classes.toImprove
-                          )}
-                        />
-                        <CardColumn
-                          title="Action Items"
-                          cards={actionItems}
-                          setCards={setActionItems}
-                          columnClasses={clsx(
-                            classes.columnTitle,
-                            classes.actionItems
-                          )}
-                        />
-                      </Grid>
-                    )}
-                  />
-                  <Route exact path="/sign-up" component={SignUp} />
-                  <Route exact path="/sign-in" component={SignIn} />
-                </Switch>
-              </Container>
-              <ConfirmDialog />
-            </main>
-          </React.Fragment>
-        </ConfirmDialogState>
+        <AlertState>
+          <ConfirmDialogState>
+            <React.Fragment>
+              <CssBaseline />
+              <NavBar openDrawer={() => setDrawerOpen(!drawerOpen)} />
+              <main>
+                <LeftDrawer open={drawerOpen} setOpen={setDrawerOpen} />
+                <Container maxWidth="md">
+                  <Switch>
+                    <Route
+                      exact
+                      path="/"
+                      render={() => (
+                        <Grid container spacing={1}>
+                          <CardColumn
+                            title="Went Well"
+                            cards={wentWell}
+                            setCards={setWentWell}
+                            columnClasses={clsx(
+                              classes.columnTitle,
+                              classes.wentWell
+                            )}
+                          />
+                          <CardColumn
+                            title="To Improve"
+                            cards={toImprove}
+                            setCards={setToImprove}
+                            columnClasses={clsx(
+                              classes.columnTitle,
+                              classes.toImprove
+                            )}
+                          />
+                          <CardColumn
+                            title="Action Items"
+                            cards={actionItems}
+                            setCards={setActionItems}
+                            columnClasses={clsx(
+                              classes.columnTitle,
+                              classes.actionItems
+                            )}
+                          />
+                        </Grid>
+                      )}
+                    />
+                    <Route exact path="/sign-up" component={SignUp} />
+                    <Route exact path="/sign-in" component={SignIn} />
+                  </Switch>
+                </Container>
+                <ConfirmDialog />
+              </main>
+            </React.Fragment>
+          </ConfirmDialogState>
+          <Alerts />
+        </AlertState>
       </AuthState>
     </Router>
   );
