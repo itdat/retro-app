@@ -17,3 +17,9 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+export const GET_CARDS = "GET_CARDS";
+export const ADD_CARD = "ADD_CARD";
+export const REMOVE_CARD = "REMOVE_CARD";
+export const UPDATE_CARD = "UPDATE_CARD";
+export const CARD_ERROR = "CARD_ERROR";
