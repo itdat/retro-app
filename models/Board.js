@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const BoardSchema = mongoose.Schema({
+  user: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "users",
+  },
   name: {
     type: String,
     required: true,
