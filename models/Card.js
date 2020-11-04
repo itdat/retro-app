@@ -1,16 +1,13 @@
 const mongoose = require("mongoose");
 
-// const voteSchema = mongoose.Schema({
-//   votes: {
-//     type: mongoose.SchemaTypes.ObjectId,
-//     ref: "users",
-//   },
-// });
-
 const CardSchema = mongoose.Schema({
-  column: {
+  boardId: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "columns",
+    ref: "boards",
+  },
+  column: {
+    type: String,
+    required: true,
   },
   content: {
     type: String,
@@ -23,10 +20,6 @@ const CardSchema = mongoose.Schema({
   user: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: "users",
-  },
-  votes: {
-    type: Array,
-    default: [],
   },
 });
 
