@@ -64,6 +64,7 @@ const AuthState = (props) => {
     }
   };
 
+  // Login
   const login = async (formData) => {
     const config = {
       headers: {

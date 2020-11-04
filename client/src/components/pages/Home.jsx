@@ -43,6 +43,7 @@ const Home = () => {
 
   useEffect(() => {
     getCards();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ const Home = () => {
       removeCard(confirm.message.idCard);
       hideConfirm();
     }
+    // eslint-disable-next-line
   }, [confirm]);
 
   return (
