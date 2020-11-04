@@ -45,7 +45,7 @@ const CardColumn = ({ title, cards, columnClasses }) => {
       {isAdding && (
         <RetroCard
           key="newCard"
-          card={{ content: "" }}
+          card={{ content: "", column: cards[0].column }}
           isEdited={true}
           isAdding={true}
           setIsAdding={setIsAdding}

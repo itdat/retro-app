@@ -9,6 +9,7 @@ import DeleteForever from "@material-ui/icons/DeleteForever";
 import { Grid, Hidden, IconButton, TextField } from "@material-ui/core";
 
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
+import CardsContext from "../../context/cards/cardsContext";
 import { CONFIRM_DELETE_CARD } from "../notification/types";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,8 +31,10 @@ const RetroCard = ({
   setIsAdding = () => {},
 }) => {
   const confirmDialogContext = useContext(ConfirmDialogContext);
+  const cardsContext = useContext(CardsContext);
 
   const { showConfirm } = confirmDialogContext;
+  const { addCard } = cardsContext;
 
   const classes = useStyles();
 
@@ -42,8 +45,14 @@ const RetroCard = ({
     setValue(e.target.value);
   };
 
-  const handleModifyClick = () => {
+  const handleModifyClick = async () => {
     if (edit && isAdding) {
+      const newCard = {
+        content: value,
+        column: card.column,
+        board: "5fa24556601b321aa80ee16c",
+      };
+      await addCard(newCard);
       setIsAdding(false);
     }
     setEdit(!edit);
