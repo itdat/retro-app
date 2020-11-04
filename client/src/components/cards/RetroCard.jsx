@@ -23,10 +23,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RetroCard = ({ card, isEdited = false }) => {
+const RetroCard = ({
+  card,
+  isEdited = false,
+  isAdding = false,
+  setIsAdding = () => {},
+}) => {
   const confirmDialogContext = useContext(ConfirmDialogContext);
 
-  const { showConfirm, hideConfirm, confirm } = confirmDialogContext;
+  const { showConfirm } = confirmDialogContext;
 
   const classes = useStyles();
 
@@ -38,6 +43,9 @@ const RetroCard = ({ card, isEdited = false }) => {
   };
 
   const handleModifyClick = () => {
+    if (edit && isAdding) {
+      setIsAdding(false);
+    }
     setEdit(!edit);
   };
 
@@ -59,6 +67,7 @@ const RetroCard = ({ card, isEdited = false }) => {
             multiline
             value={value}
             onChange={handleChange}
+            autoFocus
           />
         ) : (
           <Grid container>
