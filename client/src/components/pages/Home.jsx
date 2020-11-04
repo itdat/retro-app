@@ -4,7 +4,8 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CardColumn from "../cards/CardColumn";
 import CardsContext from "../../context/cards/cardsContext";
-
+import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
+import { CONFIRM_DELETE_CARD } from "../notification/types";
 const useStyles = makeStyles((theme) => ({
   columnTitle: {
     marginTop: "0.2rem",
@@ -28,12 +29,32 @@ const Home = () => {
   const classes = useStyles();
 
   const cardsContext = useContext(CardsContext);
+  const confirmDialogContext = useContext(ConfirmDialogContext);
 
-  const { getCards, wentWell, toImprove, actionItems } = cardsContext;
+  const {
+    getCards,
+    wentWell,
+    toImprove,
+    actionItems,
+    removeCard,
+  } = cardsContext;
+
+  const { hideConfirm, confirm } = confirmDialogContext;
 
   useEffect(() => {
     getCards();
-  }, [wentWell, toImprove, actionItems]);
+  }, []);
+
+  useEffect(() => {
+    if (
+      confirm &&
+      confirm.message.type === CONFIRM_DELETE_CARD &&
+      confirm.result === true
+    ) {
+      removeCard(confirm.message.idCard);
+      hideConfirm();
+    }
+  }, [confirm]);
 
   return (
     <Grid container spacing={1}>

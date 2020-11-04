@@ -90,8 +90,30 @@ router.put("/:id", (req, res) => {
 // @route   DELETE api/cards/:id {boardId, columnId}
 // @desc    Delete card
 // @access  Private
-router.delete("/:id", (req, res) => {
-  res.send("Delete card");
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    let cardId;
+    try {
+      cardId = mongoose.Types.ObjectId(req.params.id);
+    } catch (err) {
+      console.error(err.message);
+      return res.status(400).json({ msg: "Bad request" });
+    }
+
+    let card = await Card.findById(cardId);
+
+    if (!card) return res.status(404).json({ msg: "Card not found" });
+
+    // if (card.user.toString() !== req.user.id) {
+    //   return res.status(401).json({ msg: "Not authorized" });
+    // }
+
+    await Card.findByIdAndRemove(cardId);
+    res.json({ msg: "Card removed" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
 module.exports = router;

@@ -51,6 +51,21 @@ const CardsState = (props) => {
   // Add card
 
   // Remove card
+  const removeCard = async (id) => {
+    try {
+      await axios.delete(`/api/cards/${id}`);
+
+      dispatch({
+        type: REMOVE_CARD,
+        payload: id,
+      });
+    } catch (err) {
+      dispatch({
+        type: CARD_ERROR,
+        payload: err.response.msg,
+      });
+    }
+  };
 
   // Update card
 
@@ -61,6 +76,7 @@ const CardsState = (props) => {
         toImprove: state.toImprove,
         actionItems: state.actionItems,
         getCards,
+        removeCard,
       }}
     >
       {props.children}

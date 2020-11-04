@@ -8,35 +8,14 @@ import IconButton from "@material-ui/core/IconButton";
 
 import RetroCard from "../cards/RetroCard";
 
-import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
-import { CONFIRM_DELETE_CARD } from "../notification/types";
-
 const useStyles = makeStyles((theme) => ({
   columnTitle: {
     marginRight: "1rem",
   },
 }));
 
-const CardColumn = ({ title, cards, setCards, columnClasses }) => {
+const CardColumn = ({ title, cards, columnClasses }) => {
   const classes = useStyles();
-
-  const confirmDialogContext = useContext(ConfirmDialogContext);
-  const { confirm, hideConfirm } = confirmDialogContext;
-
-  useEffect(() => {
-    if (
-      confirm &&
-      confirm.message.type === CONFIRM_DELETE_CARD &&
-      confirm.result === true
-    ) {
-      const remainCards = cards.filter(
-        (card) => card._id !== confirm.message.idCard
-      );
-      setCards(remainCards);
-      hideConfirm();
-    }
-    // eslint-disable-next-line
-  }, [confirm, cards]);
 
   return (
     <Grid item xs={12} md={4} container wrap="nowrap" direction="column">

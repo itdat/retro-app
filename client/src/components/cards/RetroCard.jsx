@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
 
 const RetroCard = ({ card, isEdited = false }) => {
   const confirmDialogContext = useContext(ConfirmDialogContext);
-  const { showConfirm } = confirmDialogContext;
+
+  const { showConfirm, hideConfirm, confirm } = confirmDialogContext;
 
   const classes = useStyles();
 
