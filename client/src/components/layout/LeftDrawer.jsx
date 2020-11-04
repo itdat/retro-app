@@ -1,18 +1,25 @@
 import React from "react";
 import { Drawer, List, ListItem, ListItemText } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const LeftDrawer = ({ open, setOpen }) => {
   return (
     <Drawer open={open} onClose={() => setOpen(false)}>
       <List>
         <ListItem button onClick={() => setOpen(false)}>
-          <ListItemText>Home</ListItemText>
+          <ListItemText>
+            <Link to="/">Home</Link>
+          </ListItemText>
         </ListItem>
         <ListItem button onClick={() => setOpen(false)}>
-          <ListItemText>Page 2</ListItemText>
+          <ListItemText>
+            <Link to="/sign-in">Login</Link>
+          </ListItemText>
         </ListItem>
         <ListItem button onClick={() => setOpen(false)}>
-          <ListItemText>Page 3</ListItemText>
+          <ListItemText>
+            <Link to="/sign-up">Sign up</Link>
+          </ListItemText>
         </ListItem>
       </List>
     </Drawer>
