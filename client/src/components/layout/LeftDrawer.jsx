@@ -15,7 +15,7 @@ const LeftDrawer = ({ open, setOpen }) => {
             <Link to="/">Home</Link>
           </ListItemText>
         </ListItem>
-        {isAuthenticated && (
+        {!isAuthenticated && (
           <Fragment>
             <ListItem button onClick={() => setOpen(false)}>
               <ListItemText>
