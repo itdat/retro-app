@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CardColumn = ({ title, cards, columnClasses }) => {
+const CardColumn = ({ column, columnClasses, cards }) => {
   const classes = useStyles();
 
   const [isAdding, setIsAdding] = useState(false);
@@ -29,7 +29,7 @@ const CardColumn = ({ title, cards, columnClasses }) => {
         <Grid container justify="center" alignItems="center">
           <Grid item className={classes.columnTitle}>
             <Typography variant="h5" align="center" color="inherit">
-              {title}
+              {column.title}
             </Typography>
           </Grid>
           <Grid item>
@@ -39,13 +39,17 @@ const CardColumn = ({ title, cards, columnClasses }) => {
           </Grid>
         </Grid>
       </Card>
+
+      {/* Card list */}
       {cards.map((card) => {
         return <RetroCard key={card._id} card={card} />;
       })}
+
+      {/* Dummy card when adding */}
       {isAdding && (
         <RetroCard
           key="newCard"
-          card={{ content: "", column: cards[0].column }}
+          card={{ content: "", column: column.type }}
           isEdited={true}
           isAdding={true}
           setIsAdding={setIsAdding}

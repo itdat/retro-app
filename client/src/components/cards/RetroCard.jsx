@@ -80,8 +80,8 @@ const RetroCard = ({
           />
         ) : (
           <Grid container>
-            <Grid item className={classes.content}>
-              <Typography style={{ whiteSpace: "pre-line" }}>
+            <Grid item className={classes.content} zeroMinWidth>
+              <Typography style={{ whiteSpace: "pre-line" }} noWrap>
                 {value}
               </Typography>
             </Grid>

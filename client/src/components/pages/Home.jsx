@@ -40,17 +40,17 @@ const Home = () => {
     actionItems,
     removeCard,
   } = cardsContext;
-
+  const { loadUser } = authContext;
   const { hideConfirm, confirm } = confirmDialogContext;
 
-  const { loadUser } = authContext;
-
+  // Initialize in the fisrt load
   useEffect(() => {
     loadUser();
     getCards();
     // eslint-disable-next-line
   }, []);
 
+  // Delete card listener
   useEffect(() => {
     if (
       confirm &&
@@ -63,22 +63,35 @@ const Home = () => {
     // eslint-disable-next-line
   }, [confirm]);
 
+  const wentWellColumn = {
+    title: "Went Well",
+    type: "wentWell",
+  };
+  const toImproveColumn = {
+    title: "To Improve",
+    type: "toImprove",
+  };
+  const actionItemsColumn = {
+    title: "Action Items",
+    type: "actionItems",
+  };
+
   return (
     <Grid container spacing={1}>
       <CardColumn
-        title="Went Well"
-        cards={wentWell}
+        column={wentWellColumn}
         columnClasses={clsx(classes.columnTitle, classes.wentWell)}
+        cards={wentWell}
       />
       <CardColumn
-        title="To Improve"
-        cards={toImprove}
+        column={toImproveColumn}
         columnClasses={clsx(classes.columnTitle, classes.toImprove)}
+        cards={toImprove}
       />
       <CardColumn
-        title="Action Items"
-        cards={actionItems}
+        column={actionItemsColumn}
         columnClasses={clsx(classes.columnTitle, classes.actionItems)}
+        cards={actionItems}
       />
     </Grid>
   );
