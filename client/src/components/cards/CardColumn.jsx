@@ -7,10 +7,29 @@ import AddCircleOutlineTwoTone from "@material-ui/icons/AddCircleOutlineTwoTone"
 import IconButton from "@material-ui/core/IconButton";
 
 import RetroCard from "../cards/RetroCard";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "0.4em",
+    },
+    "*::-webkit-scrollbar-track": {
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)",
+    },
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "rgba(0,0,0,.1)",
+    },
+  },
   columnTitle: {
     marginRight: "1rem",
+  },
+  list: {
+    backgroundColor: "#ebecf0",
+    marginTop: "5px",
+    height: "80vh",
+    overflow: "auto",
+    borderRadius: "5px",
   },
 }));
 
@@ -39,22 +58,23 @@ const CardColumn = ({ column, columnClasses, cards }) => {
           </Grid>
         </Grid>
       </Card>
+      <Box className={classes.list}>
+        {/* Card list */}
+        {cards.map((card) => {
+          return <RetroCard key={card._id} card={card} />;
+        })}
 
-      {/* Card list */}
-      {cards.map((card) => {
-        return <RetroCard key={card._id} card={card} />;
-      })}
-
-      {/* Dummy card when adding */}
-      {isAdding && (
-        <RetroCard
-          key="newCard"
-          card={{ content: "", column: column.type }}
-          isEdited={true}
-          isAdding={true}
-          setIsAdding={setIsAdding}
-        />
-      )}
+        {/* Dummy card when adding */}
+        {isAdding && (
+          <RetroCard
+            key="newCard"
+            card={{ content: "", column: column.type }}
+            isEdited={true}
+            isAdding={true}
+            setIsAdding={setIsAdding}
+          />
+        )}
+      </Box>
     </Grid>
   );
 };
