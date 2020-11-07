@@ -92,16 +92,19 @@ const Board = ({ match }) => {
         column={wentWellColumn}
         columnClasses={clsx(classes.columnTitle, classes.wentWell)}
         cards={wentWell}
+        boardId={match.params.id}
       />
       <CardColumn
         column={toImproveColumn}
         columnClasses={clsx(classes.columnTitle, classes.toImprove)}
         cards={toImprove}
+        boardId={match.params.id}
       />
       <CardColumn
         column={actionItemsColumn}
         columnClasses={clsx(classes.columnTitle, classes.actionItems)}
         cards={actionItems}
+        boardId={match.params.id}
       />
     </Grid>
   );

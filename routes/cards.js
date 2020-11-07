@@ -11,7 +11,9 @@ const mongoose = require("mongoose");
 // @access  Private
 router.get("/", auth, async (req, res) => {
   if (!req.query.board || !req.query.column) {
-    return res.status(400).send("Bad request");
+    return res
+      .status(400)
+      .json({ msg: "Cannot load data because wrong format URL" });
   }
   try {
     let boardId;
@@ -19,7 +21,9 @@ router.get("/", auth, async (req, res) => {
       boardId = mongoose.Types.ObjectId(req.query.board);
     } catch (err) {
       console.error(err.message);
-      return res.status(400).send("Bad request");
+      return res
+        .status(400)
+        .json({ msg: "Cannot load data because board id is not valid" });
     }
     const cards = await Card.find({
       board: boardId,
@@ -53,17 +57,21 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
     const { content, column, board } = req.body;
-
     try {
-      const foundBoard = await Board.findOne({
-        _id: mongoose.Types.ObjectId(board),
-      });
-      console.log(foundBoard);
-      if (!foundBoard) {
-        console.log("Not found");
-        return res.status(400).send("Bad request");
+      try {
+        const foundBoard = await Board.findOne({
+          _id: mongoose.Types.ObjectId(board),
+        });
+        if (!foundBoard) {
+          return res
+            .status(400)
+            .json({ msg: "Cannot add card because board id not found" });
+        }
+      } catch (err) {
+        return res
+          .status(400)
+          .json({ msg: "Cannot add card because board id not found" });
       }
 
       const newCard = new Card({
@@ -72,7 +80,6 @@ router.post(
         content,
         user: req.user.id,
       });
-
       const card = await newCard.save();
       res.json(card);
     } catch (err) {

@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RetroCard = ({
+  boardId,
   card,
   isEdited = false,
   isAdding = false,
@@ -50,12 +51,14 @@ const RetroCard = ({
       const newCard = {
         content: value,
         column: card.column,
-        board: "5fa24556601b321aa80ee16c",
+        board: boardId,
       };
       await addCard(newCard);
       setIsAdding(false);
+      setEdit(false);
+    } else {
+      setEdit(!edit);
     }
-    setEdit(!edit);
   };
 
   const handleDelete = (e) => {

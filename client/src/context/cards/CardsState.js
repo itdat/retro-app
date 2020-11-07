@@ -44,7 +44,7 @@ const CardsState = (props) => {
     } catch (err) {
       dispatch({
         type: CARD_ERROR,
-        payload: "Invalid board id",
+        payload: err.response.data.msg,
       });
     }
   };
@@ -56,6 +56,7 @@ const CardsState = (props) => {
         "Content-Type": "application/json",
       },
     };
+
     try {
       const res = await axios.post("/api/cards", card, config);
       dispatch({
@@ -65,7 +66,7 @@ const CardsState = (props) => {
     } catch (err) {
       dispatch({
         type: CARD_ERROR,
-        payload: err.response.msg,
+        payload: err.response.data.msg,
       });
     }
   };

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CardColumn = ({ column, columnClasses, cards }) => {
+const CardColumn = ({ column, columnClasses, cards, boardId }) => {
   const classes = useStyles();
 
   const [isAdding, setIsAdding] = useState(false);
@@ -61,7 +61,7 @@ const CardColumn = ({ column, columnClasses, cards }) => {
       <Box className={classes.list}>
         {/* Card list */}
         {cards.map((card) => {
-          return <RetroCard key={card._id} card={card} />;
+          return <RetroCard key={card._id} card={card} boardId={boardId} />;
         })}
 
         {/* Dummy card when adding */}
@@ -69,6 +69,7 @@ const CardColumn = ({ column, columnClasses, cards }) => {
           <RetroCard
             key="newCard"
             card={{ content: "", column: column.type }}
+            boardId={boardId}
             isEdited={true}
             isAdding={true}
             setIsAdding={setIsAdding}
