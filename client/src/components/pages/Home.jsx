@@ -10,7 +10,7 @@ import { CONFIRM_DELETE_CARD } from "../notification/types";
 const useStyles = makeStyles((theme) => ({
   columnTitle: {
     marginTop: "0.2rem",
-    padding: "2rem",
+    padding: "1rem",
   },
   wentWell: {
     backgroundColor: theme.palette.success.main,

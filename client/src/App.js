@@ -18,6 +18,7 @@ import Alerts from "./components/layout/Alerts";
 import Home from "./components/pages/Home";
 import CardsState from "./context/cards/CardsState";
 import setAuthToken from "./utils/setAuthToken";
+import Boards from "./components/boards/Boards";
 
 setAuthToken(localStorage.token);
 
@@ -39,6 +40,7 @@ export default function App() {
                   <Container maxWidth="md">
                     <Switch>
                       <Route exact path="/" component={Home} />
+                      <Route path="/boards" component={Boards} />
                       <Route exact path="/sign-up" component={SignUp} />
                       <Route exact path="/sign-in" component={SignIn} />
                     </Switch>
