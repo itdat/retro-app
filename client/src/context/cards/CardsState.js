@@ -15,21 +15,22 @@ const CardsState = (props) => {
     wentWell: [],
     toImprove: [],
     actionItems: [],
+    error: null,
   };
 
   const [state, dispatch] = useReducer(cardsReducer, initialState);
 
-  // Get cards
-  const getCards = async () => {
+  // Get cards (demo id: 5fa24556601b321aa80ee16c)
+  const getCards = async (id) => {
     try {
       const wentWellRes = await axios.get(
-        `/api/cards?board=5fa24556601b321aa80ee16c&column=wentWell`
+        `/api/cards?board=${id}&column=wentWell`
       );
       const toImproveRes = await axios.get(
-        `/api/cards?board=5fa24556601b321aa80ee16c&column=toImprove`
+        `/api/cards?board=${id}&column=toImprove`
       );
       const actionItemsRes = await axios.get(
-        `/api/cards?board=5fa24556601b321aa80ee16c&column=actionItems`
+        `/api/cards?board=${id}&column=actionItems`
       );
 
       dispatch({
@@ -43,7 +44,7 @@ const CardsState = (props) => {
     } catch (err) {
       dispatch({
         type: CARD_ERROR,
-        payload: err.message,
+        payload: "Invalid board id",
       });
     }
   };
@@ -94,6 +95,7 @@ const CardsState = (props) => {
         wentWell: state.wentWell,
         toImprove: state.toImprove,
         actionItems: state.actionItems,
+        error: state.error,
         getCards,
         removeCard,
         addCard,

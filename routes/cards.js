@@ -55,10 +55,12 @@ router.post(
     }
 
     const { content, column, board } = req.body;
+
     try {
       const foundBoard = await Board.findOne({
         _id: mongoose.Types.ObjectId(board),
       });
+      console.log(foundBoard);
       if (!foundBoard) {
         console.log("Not found");
         return res.status(400).send("Bad request");

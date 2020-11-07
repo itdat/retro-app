@@ -44,6 +44,11 @@ export default (state, action) => {
         [action.payload.column]: updatedCards,
         loading: false,
       };
+    case CARD_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+      };
     default:
       return state;
   }
