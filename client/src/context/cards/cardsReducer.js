@@ -3,6 +3,7 @@ import {
   CARD_ERROR,
   GET_CARDS,
   REMOVE_CARD,
+  SET_ADDING_COLUMN,
   UPDATE_CARD,
 } from "../types";
 
@@ -48,6 +49,11 @@ export default (state, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case SET_ADDING_COLUMN:
+      return {
+        ...state,
+        addingColumn: action.payload,
       };
     default:
       return state;

@@ -8,6 +8,7 @@ import {
   GET_CARDS,
   REMOVE_CARD,
   UPDATE_CARD,
+  SET_ADDING_COLUMN,
 } from "../types";
 
 const CardsState = (props) => {
@@ -16,6 +17,7 @@ const CardsState = (props) => {
     toImprove: [],
     actionItems: [],
     error: null,
+    addingColumn: null,
   };
 
   const [state, dispatch] = useReducer(cardsReducer, initialState);
@@ -68,6 +70,12 @@ const CardsState = (props) => {
         type: CARD_ERROR,
         payload: err.response.data.msg,
       });
+      setTimeout(() => {
+        dispatch({
+          type: CARD_ERROR,
+          payload: null,
+        });
+      }, 1000);
     }
   };
 
@@ -90,6 +98,14 @@ const CardsState = (props) => {
 
   // Update card
 
+  // Set adding column
+  const setAddingColumn = (column) => {
+    dispatch({
+      type: SET_ADDING_COLUMN,
+      payload: column,
+    });
+  };
+
   return (
     <CardsContext.Provider
       value={{
@@ -97,9 +113,11 @@ const CardsState = (props) => {
         toImprove: state.toImprove,
         actionItems: state.actionItems,
         error: state.error,
+        addingColumn: state.addingColumn,
         getCards,
         removeCard,
         addCard,
+        setAddingColumn,
       }}
     >
       {props.children}

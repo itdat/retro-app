@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import AddCircleOutlineTwoTone from "@material-ui/icons/AddCircleOutlineTwoTone";
 import IconButton from "@material-ui/core/IconButton";
+import CardsContext from "../../context/cards/cardsContext";
 
 import RetroCard from "../cards/RetroCard";
 import { Box } from "@material-ui/core";
@@ -36,10 +37,13 @@ const useStyles = makeStyles((theme) => ({
 const CardColumn = ({ column, columnClasses, cards, boardId }) => {
   const classes = useStyles();
 
-  const [isAdding, setIsAdding] = useState(false);
+  const cardsContext = useContext(CardsContext);
+  const { addingColumn, setAddingColumn } = cardsContext;
 
   const addNewCard = () => {
-    setIsAdding(true);
+    if (addingColumn !== column.type) {
+      setAddingColumn(column.type);
+    }
   };
 
   return (
@@ -65,16 +69,14 @@ const CardColumn = ({ column, columnClasses, cards, boardId }) => {
         })}
 
         {/* Dummy card when adding */}
-        {isAdding && (
-          <RetroCard
-            key="newCard"
-            card={{ content: "", column: column.type }}
-            boardId={boardId}
-            isEdited={true}
-            isAdding={true}
-            setIsAdding={setIsAdding}
-          />
-        )}
+        <RetroCard
+          type="newCard"
+          card={{ content: "", column: column.type }}
+          boardId={boardId}
+          // isEdited={isAdding}
+          // isAdding={isAdding}
+          // setIsAdding={setIsAdding}
+        />
       </Box>
     </Grid>
   );

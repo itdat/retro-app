@@ -23,3 +23,4 @@ export const ADD_CARD = "ADD_CARD";
 export const REMOVE_CARD = "REMOVE_CARD";
 export const UPDATE_CARD = "UPDATE_CARD";
 export const CARD_ERROR = "CARD_ERROR";
+export const SET_ADDING_COLUMN = "SET_ADDING_COLUMN";
