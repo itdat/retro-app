@@ -70,12 +70,10 @@ const CardColumn = ({ column, columnClasses, cards, boardId }) => {
 
         {/* Dummy card when adding */}
         <RetroCard
+          key="newCard"
           type="newCard"
           card={{ content: "", column: column.type }}
           boardId={boardId}
-          // isEdited={isAdding}
-          // isAdding={isAdding}
-          // setIsAdding={setIsAdding}
         />
       </Box>
     </Grid>

@@ -97,6 +97,18 @@ const CardsState = (props) => {
   };
 
   // Update card
+  const updateCard = async (card) => {
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+
+    try {
+      const res = await axios.put(`/api/cards/${card._id}`, card, config);
+      dispatch({ type: UPDATE_CARD, payload: res.data });
+    } catch (err) {
+      dispatch({ type: CARD_ERROR, payload: err.response.msg });
+    }
+  };
 
   // Set adding column
   const setAddingColumn = (column) => {
@@ -117,6 +129,7 @@ const CardsState = (props) => {
         getCards,
         removeCard,
         addCard,
+        updateCard,
         setAddingColumn,
       }}
     >

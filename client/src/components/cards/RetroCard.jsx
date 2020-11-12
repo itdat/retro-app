@@ -24,52 +24,57 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RetroCard = ({
-  type = "listItem",
-  boardId,
-  card,
-  // isEdited = false,
-  // isAdding = false,
-  // setIsAdding = () => {},
-}) => {
+const RetroCard = ({ type = "listItem", boardId, card }) => {
   const confirmDialogContext = useContext(ConfirmDialogContext);
   const cardsContext = useContext(CardsContext);
 
   const { showConfirm } = confirmDialogContext;
-  const { addCard, addingColumn, setAddingColumn } = cardsContext;
+  const { addCard, addingColumn, updateCard, setAddingColumn } = cardsContext;
 
   const classes = useStyles();
 
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState(card.content);
 
+  // Listen if adding a new card to the column
   useEffect(() => {
     if (type === "newCard" && addingColumn === card.column) {
       setEdit(true);
       setValue("");
     }
+    // eslint-disable-next-line
   }, [addingColumn]);
 
+  // Handle input value changes
   const handleChange = (e) => {
     setValue(e.target.value);
   };
 
+  // Handle confirmation of changes (save or edit)
   const handleModifyClick = async () => {
-    if (edit && type === "newCard" && addingColumn === card.column) {
-      const newCard = {
-        content: value,
-        column: card.column,
-        board: boardId,
-      };
-
-      await addCard(newCard);
-      setAddingColumn(null);
-      setEdit(false);
-    } else {
+    if (!edit) {
       setEdit(!edit);
+    } else {
+      if (type === "newCard" && addingColumn === card.column) {
+        const newCard = {
+          content: value,
+          column: card.column,
+          board: boardId,
+        };
+
+        await addCard(newCard);
+        setAddingColumn(null);
+        setEdit(!edit);
+      } else {
+        // Update a card
+        const updatedCard = { ...card, content: value };
+        await updateCard(updatedCard);
+        setEdit(!edit);
+      }
     }
   };
 
+  // Show confirm dialog when deleting a card
   const handleDelete = (e) => {
     showConfirm({
       type: CONFIRM_DELETE_CARD,

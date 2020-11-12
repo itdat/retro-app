@@ -7,6 +7,7 @@ import {
   UPDATE_CARD,
 } from "../types";
 
+// eslint-disable-next-line
 export default (state, action) => {
   switch (action.type) {
     case GET_CARDS:
@@ -28,22 +29,32 @@ export default (state, action) => {
         loading: false,
       };
     case ADD_CARD:
-      let updatedCards = [];
-      switch (action.payload.column) {
-        case "wentWell":
-          updatedCards = [...state.wentWell, action.payload];
-          break;
-        case "toImprove":
-          updatedCards = [...state.toImprove, action.payload];
-          break;
-        case "actionItems":
-          updatedCards = [...state.actionItems, action.payload];
-          break;
-      }
+      // let updatedCards = [];
+      // switch (action.payload.column) {
+      //   case "wentWell":
+      //     updatedCards = [...state.wentWell, action.payload];
+      //     break;
+      //   case "toImprove":
+      //     updatedCards = [...state.toImprove, action.payload];
+      //     break;
+      //   case "actionItems":
+      //     updatedCards = [...state.actionItems, action.payload];
+      //     break;
+      // }
       return {
         ...state,
-        [action.payload.column]: updatedCards,
+        [action.payload.column]: [
+          ...state[action.payload.column],
+          action.payload,
+        ],
         loading: false,
+      };
+    case UPDATE_CARD:
+      return {
+        ...state,
+        [action.payload.column]: state[action.payload.column].map((card) =>
+          card._id === action.payload._id ? action.payload : card
+        ),
       };
     case CARD_ERROR:
       return {

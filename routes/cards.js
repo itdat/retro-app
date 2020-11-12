@@ -89,14 +89,32 @@ router.post(
   }
 );
 
-// @route   PUT api/cards/:id {boardId, columnId}
+// @route   PUT api/cards/:id
 // @desc    Update card
 // @access  Private
-router.put("/:id", (req, res) => {
-  res.send("Update card");
+router.put("/:id", auth, async (req, res) => {
+  const { content } = req.body;
+  const updatedContent = {};
+  if (content) updatedContent.content = content;
+
+  try {
+    let card = await Card.findById(req.params.id);
+    if (!card) {
+      return res.status(404).json({ msg: "Contact not found" });
+    }
+    card = await Card.findByIdAndUpdate(
+      req.params.id,
+      { $set: updatedContent },
+      { new: true }
+    );
+    res.json(card);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
-// @route   DELETE api/cards/:id {boardId, columnId}
+// @route   DELETE api/cards/:id
 // @desc    Delete card
 // @access  Private
 router.delete("/:id", auth, async (req, res) => {

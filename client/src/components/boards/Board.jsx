@@ -37,11 +37,11 @@ const Board = ({ match }) => {
   const alertContext = useContext(AlertContext);
 
   const {
-    getCards,
     wentWell,
     toImprove,
-    error,
     actionItems,
+    error,
+    getCards,
     removeCard,
   } = cardsContext;
   const { loadUser } = authContext;
@@ -71,6 +71,7 @@ const Board = ({ match }) => {
   // Listen error when loading cards
   useEffect(() => {
     if (error) setAlert(error);
+    // eslint-disable-next-line
   }, [error]);
 
   const wentWellColumn = {
