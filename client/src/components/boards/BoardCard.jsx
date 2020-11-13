@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
 // import { makeStyles } from "@material-ui/styles";
@@ -14,23 +14,34 @@ import {
   TextField,
 } from "@material-ui/core";
 
+import BoardsContext from "../../context/boards/boardsContext";
+
 // const useStyles = makeStyles((theme) => ({}));
 
 const BoardCard = ({ board }) => {
   // Using styles
   //   const classes = useStyles();
 
+  // Use context
+  const boardsContext = useContext(BoardsContext);
+  const { updateBoard } = boardsContext;
+
   // Use states
   const [edit, setEdit] = useState(false);
-
-  const handleEdit = (e) => {
-    setEdit(!edit);
-  };
-
   const [value, setValue] = useState({
     name: board.name,
     context: board.context,
   });
+
+  const handleEdit = async (e) => {
+    if (!edit) {
+      setEdit(!edit);
+    } else {
+      const updatedBoard = { ...board, ...value };
+      await updateBoard(updatedBoard);
+      setEdit(!edit);
+    }
+  };
 
   const handleChange = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });

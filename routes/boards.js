@@ -54,28 +54,32 @@ router.post(
 // @route   PUT api/boards/:id
 // @desc    Update board
 // @access  Private
-router.put("/:id", auth, async (req, res) => {
-  const { name, context } = req.body;
-  const updatedContent = {};
-  if (name) updatedContent.name = name;
-  if (context) updatedContent.context = context;
+router.put(
+  "/:id",
+  [auth, [check("name", "Name is required").not().isEmpty()]],
+  async (req, res) => {
+    const { name, context } = req.body;
+    const updatedContent = { name, context };
+    // if (name) updatedContent.name = name;
+    // if (context) updatedContent.context = context;
 
-  try {
-    let board = await Board.findById(req.params.id);
-    if (!board) {
-      return res.status(404).json({ msg: "Board not found" });
+    try {
+      let board = await Board.findById(req.params.id);
+      if (!board) {
+        return res.status(404).json({ msg: "Board not found" });
+      }
+      board = await Board.findByIdAndUpdate(
+        req.params.id,
+        { $set: updatedContent },
+        { new: true }
+      );
+      res.json(board);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
     }
-    board = await Board.findByIdAndUpdate(
-      req.params.id,
-      { $set: updatedContent },
-      { new: true }
-    );
-    res.json(board);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
   }
-});
+);
 
 // @route   DELETE api/boards/:id
 // @desc    Delete board
