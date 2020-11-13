@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,6 +8,7 @@ import AuthContext from "../../context/auth/authContext";
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
 import AlertContext from "../../context/alert/alertContext";
 import { CONFIRM_DELETE_CARD } from "../notification/types";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   columnTitle: {
@@ -52,6 +53,7 @@ const Board = ({ match }) => {
   useEffect(() => {
     loadUser();
     getCards(match.params.id);
+    // Get board details
     // eslint-disable-next-line
   }, []);
 
@@ -88,26 +90,33 @@ const Board = ({ match }) => {
   };
 
   return (
-    <Grid container spacing={1}>
-      <CardColumn
-        column={wentWellColumn}
-        columnClasses={clsx(classes.columnTitle, classes.wentWell)}
-        cards={wentWell}
-        boardId={match.params.id}
-      />
-      <CardColumn
-        column={toImproveColumn}
-        columnClasses={clsx(classes.columnTitle, classes.toImprove)}
-        cards={toImprove}
-        boardId={match.params.id}
-      />
-      <CardColumn
-        column={actionItemsColumn}
-        columnClasses={clsx(classes.columnTitle, classes.actionItems)}
-        cards={actionItems}
-        boardId={match.params.id}
-      />
-    </Grid>
+    <Fragment>
+      <Grid container>
+        <Grid item p={5}>
+          <Typography variant="h4">Hello</Typography>
+        </Grid>
+      </Grid>
+      <Grid container spacing={1}>
+        <CardColumn
+          column={wentWellColumn}
+          columnClasses={clsx(classes.columnTitle, classes.wentWell)}
+          cards={wentWell}
+          boardId={match.params.id}
+        />
+        <CardColumn
+          column={toImproveColumn}
+          columnClasses={clsx(classes.columnTitle, classes.toImprove)}
+          cards={toImprove}
+          boardId={match.params.id}
+        />
+        <CardColumn
+          column={actionItemsColumn}
+          columnClasses={clsx(classes.columnTitle, classes.actionItems)}
+          cards={actionItems}
+          boardId={match.params.id}
+        />
+      </Grid>
+    </Fragment>
   );
 };
 
