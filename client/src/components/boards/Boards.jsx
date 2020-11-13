@@ -9,11 +9,12 @@ import {
   Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link as LinkRoute } from "react-router-dom";
 import { Switch, Route } from "react-router-dom";
 import Board from "./Board";
 import axios from "axios";
+import AuthContext from "../../context/auth/authContext";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,18 +23,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Boards = ({ match }) => {
+  const authContext = useContext(AuthContext);
+  const { loadUser } = authContext;
   const classes = useStyles();
   const [boards, setBoards] = useState([]);
 
   useEffect(() => {
+    loadUser();
     const fetchData = async () => {
       try {
         const res = await axios.get("/api/boards");
         setBoards(res.data);
       } catch (err) {}
     };
-
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   return (
