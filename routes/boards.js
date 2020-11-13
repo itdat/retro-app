@@ -3,6 +3,7 @@ const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const Board = require("../models/Board");
 const auth = require("../middleware/auth");
+const mongoose = require("mongoose");
 
 // @route   GET api/boards
 // @desc    Get all users boards
