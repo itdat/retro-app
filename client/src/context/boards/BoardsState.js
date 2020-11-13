@@ -4,7 +4,7 @@ import BoardsContext from "./boardsContext";
 import boardsReducer from "./boardsReducer";
 import {
   ADD_BOARD,
-  BOARD_ERROR,
+  BOARD_MESSAGE,
   GET_BOARDS,
   REMOVE_BOARD,
   UPDATE_BOARD,
@@ -13,7 +13,7 @@ import {
 const BoardsState = (props) => {
   const initialState = {
     boards: [],
-    error: null,
+    message: null,
   };
 
   const [state, dispatch] = useReducer(boardsReducer, initialState);
@@ -28,7 +28,7 @@ const BoardsState = (props) => {
       });
     } catch (err) {
       dispatch({
-        type: BOARD_ERROR,
+        type: BOARD_MESSAGE,
         payload: err.response.data.msg,
       });
     }
@@ -48,17 +48,38 @@ const BoardsState = (props) => {
         type: ADD_BOARD,
         payload: res.data,
       });
-    } catch (err) {
+
       dispatch({
-        type: BOARD_ERROR,
-        payload: err.response.data.msg,
+        type: BOARD_MESSAGE,
+        payload: "Card created",
       });
+    } catch (err) {
+      if (err.response.data.msg) {
+        dispatch({
+          type: BOARD_MESSAGE,
+          payload: err.response.data.msg,
+        });
+      }
+
+      // Check validation errors
+      if (err.response.data.errors) {
+        // eslint-disable-next-line
+        err.response.data.errors.map((error, i) => {
+          setTimeout(() => {
+            dispatch({
+              type: BOARD_MESSAGE,
+              payload: error.msg,
+            });
+          }, 3000 * (i + 1));
+        });
+      }
+
       setTimeout(() => {
         dispatch({
-          type: BOARD_ERROR,
+          type: BOARD_MESSAGE,
           payload: null,
         });
-      }, 1000);
+      }, 0);
     }
   };
 
@@ -71,7 +92,7 @@ const BoardsState = (props) => {
       const res = await axios.put(`/api/boards/${board._id}`, board, config);
       dispatch({ type: UPDATE_BOARD, payload: res.data });
     } catch (err) {
-      dispatch({ type: BOARD_ERROR, payload: err.response.msg });
+      dispatch({ type: BOARD_MESSAGE, payload: err.response.msg });
     }
   };
 
@@ -85,7 +106,7 @@ const BoardsState = (props) => {
       });
     } catch (err) {
       dispatch({
-        type: BOARD_ERROR,
+        type: BOARD_MESSAGE,
         payload: err.response.msg,
       });
     }
@@ -95,7 +116,7 @@ const BoardsState = (props) => {
     <BoardsContext.Provider
       value={{
         boards: state.boards,
-        error: state.error,
+        message: state.message,
         getBoards,
         addBoard,
         updateBoard,

@@ -1,7 +1,7 @@
 import {
   GET_BOARDS,
   ADD_BOARD,
-  BOARD_ERROR,
+  BOARD_MESSAGE,
   REMOVE_BOARD,
   UPDATE_BOARD,
 } from "../types";
@@ -34,10 +34,10 @@ export default (state, action) => {
         boards: state.boards.filter((board) => board._id !== action.payload),
         loading: false,
       };
-    case BOARD_ERROR:
+    case BOARD_MESSAGE:
       return {
         ...state,
-        error: action.payload,
+        message: action.payload,
       };
     default:
       return state;

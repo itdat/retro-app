@@ -8,7 +8,7 @@ import AuthContext from "../../context/auth/authContext";
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
 import AlertContext from "../../context/alert/alertContext";
 import { CONFIRM_DELETE_CARD } from "../notification/types";
-import { Button, Typography } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 
