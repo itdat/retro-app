@@ -53,15 +53,50 @@ router.post(
 // @route   PUT api/boards/:id
 // @desc    Update board
 // @access  Private
-router.put("/:id", (req, res) => {
-  res.send("Update board");
+router.put("/:id", auth, async (req, res) => {
+  const { name, context } = req.body;
+  const updatedContent = {};
+  if (name) updatedContent.name = name;
+  if (context) updatedContent.context = context;
+
+  try {
+    let board = await Board.findById(req.params.id);
+    if (!board) {
+      return res.status(404).json({ msg: "Board not found" });
+    }
+    board = await Board.findByIdAndUpdate(
+      req.params.id,
+      { $set: updatedContent },
+      { new: true }
+    );
+    res.json(board);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
 // @route   DELETE api/boards/:id
 // @desc    Delete board
 // @access  Private
-router.delete("/:id", (req, res) => {
-  res.send("Delete board");
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    let boardId;
+    try {
+      boardId = mongoose.Types.ObjectId(req.params.id);
+    } catch (err) {
+      console.error(err.message);
+      return res.status(404).json({ msg: "Board not found" });
+    }
+    let board = await Board.findById(boardId);
+    if (!board) return res.status(404).json({ msg: "Board not found" });
+
+    await Board.findByIdAndRemove(boardId);
+    res.json({ msg: "Board removed" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
 module.exports = router;

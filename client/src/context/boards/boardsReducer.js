@@ -18,7 +18,7 @@ export default (state, action) => {
     case ADD_BOARD:
       return {
         ...state,
-        boards: [...state.boards, action.payload],
+        boards: [action.payload, ...state.boards],
         loading: false,
       };
     case UPDATE_BOARD:
