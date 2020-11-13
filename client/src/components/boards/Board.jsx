@@ -8,9 +8,14 @@ import AuthContext from "../../context/auth/authContext";
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
 import AlertContext from "../../context/alert/alertContext";
 import { CONFIRM_DELETE_CARD } from "../notification/types";
-import { Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import ArrowBack from "@material-ui/icons/ArrowBack";
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    marginTop: "5px",
+  },
   columnTitle: {
     marginTop: "0.2rem",
     padding: "1rem",
@@ -91,9 +96,16 @@ const Board = ({ match }) => {
 
   return (
     <Fragment>
-      <Grid container>
-        <Grid item p={5}>
-          <Typography variant="h4">Hello</Typography>
+      <Grid container className={classes.container}>
+        <Grid item>
+          <Link
+            to="/boards"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Button variant="outlined" startIcon={<ArrowBack />}>
+              Back to boards
+            </Button>
+          </Link>
         </Grid>
       </Grid>
       <Grid container spacing={1}>

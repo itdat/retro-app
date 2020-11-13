@@ -5,10 +5,6 @@ export const SET_CONFIRM_DIALOG = "SET_CONFIRM_DIALOG";
 export const CONFIRM_DIALOG = "CONFIRM_DIALOG";
 export const CANCEL_DIALOG = "CANCEL_DIALOG";
 
-export const ADD_BOARD = "ADD_BOARD";
-export const DELETE_BOARD = "DELETE_BOARD";
-export const UPDATE_BOARD = "UPDATE_BOARD";
-
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAIL = "REGISTER_FAIL";
 export const USER_LOADED = "USER_LOADED";
@@ -24,3 +20,9 @@ export const REMOVE_CARD = "REMOVE_CARD";
 export const UPDATE_CARD = "UPDATE_CARD";
 export const CARD_ERROR = "CARD_ERROR";
 export const SET_ADDING_COLUMN = "SET_ADDING_COLUMN";
+
+export const GET_BOARDS = "GET_BOARDS";
+export const ADD_BOARD = "ADD_BOARD";
+export const REMOVE_BOARD = "REMOVE_BOARD";
+export const UPDATE_BOARD = "UPDATE_BOARD";
+export const BOARD_ERROR = "BOARD_ERROR";

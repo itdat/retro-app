@@ -15,6 +15,7 @@ import { Switch, Route } from "react-router-dom";
 import Board from "./Board";
 import axios from "axios";
 import AuthContext from "../../context/auth/authContext";
+import Add from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -48,6 +49,16 @@ const Boards = ({ match }) => {
         path={match.path}
         render={() => (
           <Grid container className={classes.container} spacing={1}>
+            <Grid item xs={12}>
+              <Button
+                variant="outlined"
+                color="success"
+                fullWidth
+                startIcon={<Add />}
+              >
+                Add new board
+              </Button>
+            </Grid>
             {boards &&
               boards.map((board) => (
                 <Grid item key={board._id} xs={12} sm={3}>
