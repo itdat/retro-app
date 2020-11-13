@@ -10,6 +10,10 @@ import FormInputDialog from "./FormInputDialog";
 import AuthContext from "../../context/auth/authContext";
 import BoardsContext from "../../context/boards/boardsContext";
 import AlertContext from "../../context/alert/alertContext";
+import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
+
+import { CONFIRM_DELETE_BOARD } from "../notification/types";
+
 import BoardCard from "./BoardCard";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,10 +31,13 @@ const Boards = ({ match }) => {
   const { loadUser } = authContext;
 
   const boardsContext = useContext(BoardsContext);
-  const { boards, message, getBoards, addBoard } = boardsContext;
+  const { boards, message, getBoards, addBoard, removeBoard } = boardsContext;
 
   const alertContext = useContext(AlertContext);
   const { setAlert } = alertContext;
+
+  const confirmDialogContext = useContext(ConfirmDialogContext);
+  const { hideConfirm, confirm } = confirmDialogContext;
 
   // Handle form dialog
   const [open, setOpen] = useState(false);
@@ -54,6 +61,19 @@ const Boards = ({ match }) => {
     }
     // eslint-disable-next-line
   }, [message]);
+
+  // Delete board listener
+  useEffect(() => {
+    if (
+      confirm &&
+      confirm.message.type === CONFIRM_DELETE_BOARD &&
+      confirm.result === true
+    ) {
+      removeBoard(confirm.message.id);
+      hideConfirm();
+    }
+    // eslint-disable-next-line
+  }, [confirm]);
 
   return (
     <Switch>

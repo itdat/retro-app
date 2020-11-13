@@ -15,6 +15,9 @@ import {
 } from "@material-ui/core";
 
 import BoardsContext from "../../context/boards/boardsContext";
+import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
+
+import { CONFIRM_DELETE_BOARD } from "../notification/types";
 
 // const useStyles = makeStyles((theme) => ({}));
 
@@ -26,12 +29,19 @@ const BoardCard = ({ board }) => {
   const boardsContext = useContext(BoardsContext);
   const { updateBoard } = boardsContext;
 
+  const confirmDialogContext = useContext(ConfirmDialogContext);
+  const { showConfirm } = confirmDialogContext;
+
   // Use states
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState({
     name: board.name,
     context: board.context,
   });
+
+  const handleChange = (e) => {
+    setValue({ ...value, [e.target.name]: e.target.value });
+  };
 
   const handleEdit = async (e) => {
     if (!edit) {
@@ -43,8 +53,13 @@ const BoardCard = ({ board }) => {
     }
   };
 
-  const handleChange = (e) => {
-    setValue({ ...value, [e.target.name]: e.target.value });
+  const handleDelete = (e) => {
+    showConfirm({
+      type: CONFIRM_DELETE_BOARD,
+      title: "Confirm delete operation",
+      content: "Are you sure to delete this board?",
+      id: board._id,
+    });
   };
 
   return (
@@ -110,6 +125,9 @@ const BoardCard = ({ board }) => {
           </Button>
           <Button size="small" color="primary" onClick={handleEdit}>
             {edit ? "Save" : "Edit"}
+          </Button>
+          <Button size="small" color="primary" onClick={handleDelete}>
+            Delete
           </Button>
         </CardActions>
       </Card>
