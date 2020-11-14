@@ -1,14 +1,15 @@
 import React, { useContext } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
+import { Grid, Box, Card, IconButton, Typography } from "@material-ui/core";
 import AddCircleOutlineTwoTone from "@material-ui/icons/AddCircleOutlineTwoTone";
-import IconButton from "@material-ui/core/IconButton";
+
 import CardsContext from "../../context/cards/cardsContext";
 
 import RetroCard from "../cards/RetroCard";
-import { Box } from "@material-ui/core";
+import DummyCard from "../cards/DummyCard";
+
+import { Droppable } from "react-beautiful-dnd";
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -64,14 +65,18 @@ const CardColumn = ({ column, columnClasses, cards, boardId }) => {
       </Card>
       <Box className={classes.list}>
         {/* Card list */}
-        {cards.map((card) => {
-          return <RetroCard key={card._id} card={card} boardId={boardId} />;
-        })}
-
+        <Droppable droppableId={column.type}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {cards.map((card, index) => {
+                return <RetroCard key={card._id} card={card} index={index} />;
+              })}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
         {/* Dummy card when adding */}
-        <RetroCard
-          key="newCard"
-          type="newCard"
+        <DummyCard
           card={{ content: "", column: column.type }}
           boardId={boardId}
         />

@@ -15,12 +15,13 @@ import ConfirmDialog from "./components/notification/ConfirmDialog";
 
 import setAuthToken from "./utils/setAuthToken";
 
-// Contexts
+// States
 import ConfirmDialogState from "./context/confirmDialog/ConfirmDialogState";
 import AuthState from "./context/auth/AuthState";
 import AlertState from "./context/alert/AlertState";
 import CardsState from "./context/cards/CardsState";
 import BoardsState from "./context/boards/BoardsState";
+import { DragDropContext } from "react-beautiful-dnd";
 
 setAuthToken(localStorage.token);
 
@@ -28,33 +29,37 @@ export default function App() {
   // Drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  const onDragEnd = () => null;
+
   return (
     <Router>
       <AuthState>
         <AlertState>
-          <BoardsState>
-            <CardsState>
-              <ConfirmDialogState>
-                <React.Fragment>
-                  <CssBaseline />
-                  <NavBar openDrawer={() => setDrawerOpen(!drawerOpen)} />
-                  <main>
-                    <LeftDrawer open={drawerOpen} setOpen={setDrawerOpen} />
-                    <Container maxWidth="md">
-                      <Switch>
-                        <Route exact path="/" component={Home} />
-                        <Route path="/boards" component={Boards} />
-                        <Route exact path="/sign-up" component={SignUp} />
-                        <Route exact path="/sign-in" component={SignIn} />
-                      </Switch>
-                    </Container>
-                    <ConfirmDialog />
-                  </main>
-                </React.Fragment>
-              </ConfirmDialogState>
-              <Alerts />
-            </CardsState>
-          </BoardsState>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <BoardsState>
+              <CardsState>
+                <ConfirmDialogState>
+                  <React.Fragment>
+                    <CssBaseline />
+                    <NavBar openDrawer={() => setDrawerOpen(!drawerOpen)} />
+                    <main>
+                      <LeftDrawer open={drawerOpen} setOpen={setDrawerOpen} />
+                      <Container maxWidth="md">
+                        <Switch>
+                          <Route exact path="/" component={Home} />
+                          <Route path="/boards" component={Boards} />
+                          <Route exact path="/sign-up" component={SignUp} />
+                          <Route exact path="/sign-in" component={SignIn} />
+                        </Switch>
+                      </Container>
+                      <ConfirmDialog />
+                    </main>
+                  </React.Fragment>
+                </ConfirmDialogState>
+                <Alerts />
+              </CardsState>
+            </BoardsState>
+          </DragDropContext>
         </AlertState>
       </AuthState>
     </Router>

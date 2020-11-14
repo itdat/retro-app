@@ -1,16 +1,20 @@
 import React, { Fragment, useContext, useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
+
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
+import { Grid, Button } from "@material-ui/core";
+import ArrowBack from "@material-ui/icons/ArrowBack";
+
 import CardColumn from "../cards/CardColumn";
+
+// Contexts
 import CardsContext from "../../context/cards/cardsContext";
 import AuthContext from "../../context/auth/authContext";
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
 import AlertContext from "../../context/alert/alertContext";
+
 import { CONFIRM_DELETE_CARD } from "../notification/types";
-import { Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import ArrowBack from "@material-ui/icons/ArrowBack";
 
 const useStyles = makeStyles((theme) => ({
   container: {
