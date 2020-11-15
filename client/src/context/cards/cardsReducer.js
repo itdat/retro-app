@@ -5,6 +5,7 @@ import {
   REMOVE_CARD,
   SET_ADDING_COLUMN,
   UPDATE_CARD,
+  SORT_CARDS,
 } from "../types";
 
 // eslint-disable-next-line
@@ -53,6 +54,11 @@ export default (state, action) => {
       return {
         ...state,
         addingColumn: action.payload,
+      };
+    case SORT_CARDS:
+      return {
+        ...state,
+        [action.payload.name]: action.payload.list,
       };
     default:
       return state;

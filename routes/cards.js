@@ -31,14 +31,21 @@ router.get("/", auth, async (req, res) => {
       column: req.query.column,
     });
 
-    // const list = cards.map((card) => card._id);
-    // const newColumn = new Column({
-    //   name: req.query.column,
-    //   list: list,
-    // });
-    // await newColumn.save();
+    const orderedIds = await Column.findOne({ name: req.query.column });
+    let orderedCards = [...Array(orderedIds.list.length)];
 
-    res.json(cards);
+    const reorder = async () => {
+      for (const card of cards) {
+        const index = await orderedIds.list.findIndex(
+          (id) => String(id) === String(card._id)
+        );
+        orderedCards[index] = card;
+      }
+    };
+
+    await reorder();
+
+    res.json(orderedCards);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -101,13 +108,11 @@ router.post(
           });
           const column = await newColumn.save();
         } else {
-          console.log(`${column} is existed`);
-          const updatedColumn = await Column.findOneAndUpdate(
+          await Column.findOneAndUpdate(
             { name: column },
             { $push: { list: { $each: [card._id], $position: 0 } } },
             { new: true }
           );
-          console.log(updatedColumn);
         }
       } catch (err) {
         console.error(err.message);

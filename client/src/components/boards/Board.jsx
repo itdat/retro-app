@@ -1,10 +1,10 @@
 import React, { Fragment, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Button } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
+import { DragDropContext } from "react-beautiful-dnd";
 
 import CardColumn from "../cards/CardColumn";
 
@@ -13,6 +13,7 @@ import CardsContext from "../../context/cards/cardsContext";
 import AuthContext from "../../context/auth/authContext";
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
 import AlertContext from "../../context/alert/alertContext";
+import ColumnsContext from "../../context/columns/columnsContext";
 
 import { CONFIRM_DELETE_CARD } from "../notification/types";
 
@@ -45,6 +46,7 @@ const Board = ({ match }) => {
   const authContext = useContext(AuthContext);
   const confirmDialogContext = useContext(ConfirmDialogContext);
   const alertContext = useContext(AlertContext);
+  const columnsContext = useContext(ColumnsContext);
 
   const {
     wentWell,
@@ -58,10 +60,24 @@ const Board = ({ match }) => {
   const { hideConfirm, confirm } = confirmDialogContext;
   const { setAlert } = alertContext;
 
+  const {
+    wentWellOrder,
+    toImproveOrder,
+    actionItemsOrder,
+    getColumnOrders,
+    moveCard,
+  } = columnsContext;
+
+  useEffect(() => {
+    getCards(match.params.id);
+    // eslint-disable-next-line
+  }, [wentWellOrder, toImproveOrder, actionItemsOrder]);
+
   // Initialize in the fisrt load
   useEffect(() => {
     loadUser();
     getCards(match.params.id);
+    getColumnOrders(match.params.id);
     // Get board details
     // eslint-disable-next-line
   }, []);
@@ -98,41 +114,55 @@ const Board = ({ match }) => {
     type: "actionItems",
   };
 
+  const onDragEnd = async (result) => {
+    await moveCard({
+      boardId: match.params.id,
+      destColumn: result.destination.droppableId,
+      destIndex: result.destination.index,
+      srcId: result.draggableId,
+    });
+  };
+
   return (
-    <Fragment>
-      <Grid container className={classes.container}>
-        <Grid item>
-          <Link
-            to="/boards"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <Button variant="outlined" startIcon={<ArrowBack />}>
-              Back to boards
-            </Button>
-          </Link>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Fragment>
+        <Grid container className={classes.container}>
+          <Grid item>
+            <Link
+              to="/boards"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <Button variant="outlined" startIcon={<ArrowBack />}>
+                Back to boards
+              </Button>
+            </Link>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container spacing={1}>
-        <CardColumn
-          column={wentWellColumn}
-          columnClasses={clsx(classes.columnTitle, classes.wentWell)}
-          cards={wentWell}
-          boardId={match.params.id}
-        />
-        <CardColumn
-          column={toImproveColumn}
-          columnClasses={clsx(classes.columnTitle, classes.toImprove)}
-          cards={toImprove}
-          boardId={match.params.id}
-        />
-        <CardColumn
-          column={actionItemsColumn}
-          columnClasses={clsx(classes.columnTitle, classes.actionItems)}
-          cards={actionItems}
-          boardId={match.params.id}
-        />
-      </Grid>
-    </Fragment>
+        <Grid container spacing={1}>
+          <CardColumn
+            column={wentWellColumn}
+            columnClasses={clsx(classes.columnTitle, classes.wentWell)}
+            cards={wentWell}
+            order={wentWellOrder}
+            boardId={match.params.id}
+          />
+          <CardColumn
+            column={toImproveColumn}
+            columnClasses={clsx(classes.columnTitle, classes.toImprove)}
+            cards={toImprove}
+            order={toImproveOrder}
+            boardId={match.params.id}
+          />
+          <CardColumn
+            column={actionItemsColumn}
+            columnClasses={clsx(classes.columnTitle, classes.actionItems)}
+            cards={actionItems}
+            order={actionItemsOrder}
+            boardId={match.params.id}
+          />
+        </Grid>
+      </Fragment>
+    </DragDropContext>
   );
 };
 

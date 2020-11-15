@@ -20,8 +20,8 @@ import ConfirmDialogState from "./context/confirmDialog/ConfirmDialogState";
 import AuthState from "./context/auth/AuthState";
 import AlertState from "./context/alert/AlertState";
 import CardsState from "./context/cards/CardsState";
+import ColumnsState from "./context/columns/ColumnsState";
 import BoardsState from "./context/boards/BoardsState";
-import { DragDropContext } from "react-beautiful-dnd";
 
 setAuthToken(localStorage.token);
 
@@ -29,14 +29,12 @@ export default function App() {
   // Drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const onDragEnd = () => null;
-
   return (
     <Router>
       <AuthState>
         <AlertState>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <BoardsState>
+          <BoardsState>
+            <ColumnsState>
               <CardsState>
                 <ConfirmDialogState>
                   <React.Fragment>
@@ -58,8 +56,8 @@ export default function App() {
                 </ConfirmDialogState>
                 <Alerts />
               </CardsState>
-            </BoardsState>
-          </DragDropContext>
+            </ColumnsState>
+          </BoardsState>
         </AlertState>
       </AuthState>
     </Router>

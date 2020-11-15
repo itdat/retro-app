@@ -9,6 +9,7 @@ import {
   REMOVE_CARD,
   UPDATE_CARD,
   SET_ADDING_COLUMN,
+  SORT_CARDS,
 } from "../types";
 
 const CardsState = (props) => {
@@ -118,6 +119,32 @@ const CardsState = (props) => {
     });
   };
 
+  // Sort cards
+  const sortCards = async (column, cards, order) => {
+    const reorder = async () => {
+      console.log(cards);
+      console.log(order);
+      let orderedCards = [...Array(order.length)];
+      for (const card of cards) {
+        const index = await order.findIndex(
+          (id) => String(id) === String(card._id)
+        );
+        orderedCards[index] = card;
+      }
+      return orderedCards;
+    };
+    let value = await reorder();
+    console.log(value);
+    // console.log(`${column} : ${value}`);
+    dispatch({
+      type: SORT_CARDS,
+      payload: {
+        name: column,
+        list: value,
+      },
+    });
+  };
+
   return (
     <CardsContext.Provider
       value={{
@@ -131,6 +158,7 @@ const CardsState = (props) => {
         addCard,
         updateCard,
         setAddingColumn,
+        sortCards,
       }}
     >
       {props.children}

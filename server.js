@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/db");
 const path = require("path");
+const { nextTick } = require("process");
 
 // Connect DB
 connectDB();
@@ -13,8 +14,15 @@ app.use(express.json({ extended: false }));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/boards", require("./routes/boards"));
+app.use(
+  "/api/boards/:boardId/columns/",
+  (req, res, next) => {
+    req.body.boardId = req.params.boardId;
+    next();
+  },
+  require("./routes/columns")
+);
 app.use("/api/cards", require("./routes/cards"));
-
 const PORT = process.env.PORT || 5000;
 
 // Server static assets in production

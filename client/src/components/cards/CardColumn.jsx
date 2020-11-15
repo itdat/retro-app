@@ -10,6 +10,12 @@ import RetroCard from "../cards/RetroCard";
 import DummyCard from "../cards/DummyCard";
 
 import { Droppable } from "react-beautiful-dnd";
+import styled from "styled-components";
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 const useStyles = makeStyles((theme) => ({
   "@global": {
@@ -72,12 +78,14 @@ const CardColumn = ({ column, columnClasses, cards, boardId }) => {
         {/* Card list */}
         <Droppable droppableId={column.type}>
           {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
+            <Container {...provided.droppableProps} ref={provided.innerRef}>
               {cards.map((card, index) => {
-                return <RetroCard key={card._id} card={card} index={index} />;
+                return (
+                  card && <RetroCard key={card._id} card={card} index={index} />
+                );
               })}
               {provided.placeholder}
-            </div>
+            </Container>
           )}
         </Droppable>
       </Box>
