@@ -4,6 +4,7 @@ const { check, validationResult } = require("express-validator");
 const Card = require("../models/Card");
 const auth = require("../middleware/auth");
 const Board = require("../models/Board");
+const Column = require("../models/Column");
 const mongoose = require("mongoose");
 
 // @route   GET /api/cards?board=...&column=...
@@ -29,6 +30,14 @@ router.get("/", auth, async (req, res) => {
       board: boardId,
       column: req.query.column,
     });
+
+    // const list = cards.map((card) => card._id);
+    // const newColumn = new Column({
+    //   name: req.query.column,
+    //   list: list,
+    // });
+    // await newColumn.save();
+
     res.json(cards);
   } catch (err) {
     console.error(err.message);
@@ -81,6 +90,30 @@ router.post(
         user: req.user.id,
       });
       const card = await newCard.save();
+
+      // Init column
+      try {
+        const foundColumn = await Column.findOne({ name: column });
+        if (!foundColumn) {
+          const newColumn = new Column({
+            name: column,
+            list: [card._id],
+          });
+          const column = await newColumn.save();
+        } else {
+          console.log(`${column} is existed`);
+          const updatedColumn = await Column.findOneAndUpdate(
+            { name: column },
+            { $push: { list: { $each: [card._id], $position: 0 } } },
+            { new: true }
+          );
+          console.log(updatedColumn);
+        }
+      } catch (err) {
+        console.error(err.message);
+        return res.status(500).send("Server Error");
+      }
+
       res.json(card);
     } catch (err) {
       console.error(err.message);
@@ -134,13 +167,56 @@ router.delete("/:id", auth, async (req, res) => {
     // if (card.user.toString() !== req.user.id) {
     //   return res.status(401).json({ msg: "Not authorized" });
     // }
+    const cardToRemove = await Card.findById(cardId);
+    const columnModified = await Column.findOne({ name: cardToRemove.column });
+    const updatedList = columnModified.list.filter(
+      (id) => String(id) !== String(cardToRemove._id)
+    );
+    const updatedColumn = await Column.findByIdAndUpdate(
+      columnModified._id,
+      { $set: { list: updatedList } },
+      { new: true }
+    );
+    console.log("Done delete");
+    console.log(updatedColumn);
 
     await Card.findByIdAndRemove(cardId);
+
     res.json({ msg: "Card removed" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
+
+// @route   GET api/cards/:id?columnDes&indexDes
+// @desc    Move card
+// @access  Private
+// router.get("/move/:id", auth, async (req, res) => {
+//   if (!req.query.board || !req.query.column) {
+//     return res
+//       .status(400)
+//       .json({ msg: "Cannot load data because wrong format URL" });
+//   }
+//   try {
+//     let boardId;
+//     try {
+//       boardId = mongoose.Types.ObjectId(req.query.board);
+//     } catch (err) {
+//       console.error(err.message);
+//       return res
+//         .status(400)
+//         .json({ msg: "Cannot load data because board id is not valid" });
+//     }
+//     const cards = await Card.find({
+//       board: boardId,
+//       column: req.query.column,
+//     });
+//     res.json(cards);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send("Server Error");
+//   }
+// });
 
 module.exports = router;

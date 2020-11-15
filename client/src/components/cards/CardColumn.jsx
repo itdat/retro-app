@@ -64,6 +64,11 @@ const CardColumn = ({ column, columnClasses, cards, boardId }) => {
         </Grid>
       </Card>
       <Box className={classes.list}>
+        {/* Dummy card when adding */}
+        <DummyCard
+          card={{ content: "", column: column.type }}
+          boardId={boardId}
+        />
         {/* Card list */}
         <Droppable droppableId={column.type}>
           {(provided) => (
@@ -75,11 +80,6 @@ const CardColumn = ({ column, columnClasses, cards, boardId }) => {
             </div>
           )}
         </Droppable>
-        {/* Dummy card when adding */}
-        <DummyCard
-          card={{ content: "", column: column.type }}
-          boardId={boardId}
-        />
       </Box>
     </Grid>
   );

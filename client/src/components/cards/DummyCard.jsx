@@ -15,6 +15,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   padding: 0.5rem;
+  padding-bottom: 0;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -65,8 +66,8 @@ const DummyCard = ({ boardId, card }) => {
   };
 
   return (
-    <Container>
-      <Card hidden={addingColumn === card.column ? false : true}>
+    <Container hidden={addingColumn === card.column ? false : true}>
+      <Card>
         <CardContent className={classes.cardContent}>
           {edit && (
             <TextField

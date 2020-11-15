@@ -29,23 +29,11 @@ export default (state, action) => {
         loading: false,
       };
     case ADD_CARD:
-      // let updatedCards = [];
-      // switch (action.payload.column) {
-      //   case "wentWell":
-      //     updatedCards = [...state.wentWell, action.payload];
-      //     break;
-      //   case "toImprove":
-      //     updatedCards = [...state.toImprove, action.payload];
-      //     break;
-      //   case "actionItems":
-      //     updatedCards = [...state.actionItems, action.payload];
-      //     break;
-      // }
       return {
         ...state,
         [action.payload.column]: [
-          ...state[action.payload.column],
           action.payload,
+          ...state[action.payload.column],
         ],
         loading: false,
       };
