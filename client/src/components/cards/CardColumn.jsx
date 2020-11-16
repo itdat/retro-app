@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Box, Card, IconButton, Typography } from "@material-ui/core";
@@ -11,6 +11,7 @@ import DummyCard from "../cards/DummyCard";
 
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { useState } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CardColumn = ({ column, columnClasses, cards, boardId }) => {
+const CardColumn = ({ column, columnClasses, boardId, cardMap, order }) => {
   const classes = useStyles();
 
   const cardsContext = useContext(CardsContext);
@@ -52,6 +53,14 @@ const CardColumn = ({ column, columnClasses, cards, boardId }) => {
       setAddingColumn(column.type);
     }
   };
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (cardMap.size === order.length && cardMap.size) {
+      setLoading(false);
+    }
+  }, [cardMap, order]);
 
   return (
     <Grid item xs={12} md={4} container wrap="nowrap" direction="column">
@@ -79,11 +88,19 @@ const CardColumn = ({ column, columnClasses, cards, boardId }) => {
         <Droppable droppableId={column.type}>
           {(provided) => (
             <Container {...provided.droppableProps} ref={provided.innerRef}>
-              {cards.map((card, index) => {
-                return (
-                  card && <RetroCard key={card._id} card={card} index={index} />
-                );
-              })}
+              {!loading ? (
+                order.map((id, index) => {
+                  return (
+                    <RetroCard
+                      key={id}
+                      card={cardMap.get(String(id))}
+                      index={index}
+                    />
+                  );
+                })
+              ) : (
+                <div>Loading...</div>
+              )}
               {provided.placeholder}
             </Container>
           )}

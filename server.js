@@ -22,7 +22,15 @@ app.use(
   },
   require("./routes/columns")
 );
-app.use("/api/cards", require("./routes/cards"));
+app.use(
+  "/api/boards/:boardId/cards/",
+  (req, res, next) => {
+    req.body.boardId = req.params.boardId;
+    next();
+  },
+  require("./routes/cards")
+);
+
 const PORT = process.env.PORT || 5000;
 
 // Server static assets in production

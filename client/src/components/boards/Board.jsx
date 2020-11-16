@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -48,14 +48,7 @@ const Board = ({ match }) => {
   const alertContext = useContext(AlertContext);
   const columnsContext = useContext(ColumnsContext);
 
-  const {
-    wentWell,
-    toImprove,
-    actionItems,
-    error,
-    getCards,
-    removeCard,
-  } = cardsContext;
+  const { cards, error, getCards, removeCard } = cardsContext;
   const { loadUser } = authContext;
   const { hideConfirm, confirm } = confirmDialogContext;
   const { setAlert } = alertContext;
@@ -68,19 +61,45 @@ const Board = ({ match }) => {
     moveCard,
   } = columnsContext;
 
-  useEffect(() => {
-    getCards(match.params.id);
-    // eslint-disable-next-line
-  }, [wentWellOrder, toImproveOrder, actionItemsOrder]);
+  // useEffect(() => {
+  //   getCards(match.params.id);
+  //   // eslint-disable-next-line
+  // }, [wentWellOrder, toImproveOrder, actionItemsOrder]);
+
+  // Hashmap for cards
+  const [cardMap, setCardMap] = useState(new Map());
+
+  const mapToHashMap = async (cards, ids) => {
+    let newCardMap = new Map(cardMap);
+    await (async () => {
+      for (const id of ids) {
+        const card = await cards.find((c) => String(c._id) === String(id));
+        newCardMap.set(String(id), card);
+      }
+    })();
+    setCardMap(newCardMap);
+  };
 
   // Initialize in the fisrt load
   useEffect(() => {
-    loadUser();
-    getCards(match.params.id);
-    getColumnOrders(match.params.id);
-    // Get board details
+    const prepareData = async () => {
+      await loadUser();
+      await getCards(match.params.id);
+      await getColumnOrders(match.params.id);
+    };
+    try {
+      prepareData();
+    } catch (err) {
+      console.error(err);
+    }
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    mapToHashMap(cards, wentWellOrder);
+    mapToHashMap(cards, toImproveOrder);
+    mapToHashMap(cards, actionItemsOrder);
+  }, [cards, wentWellOrder, toImproveOrder, actionItemsOrder]);
 
   // Delete card listener
   useEffect(() => {
@@ -142,23 +161,23 @@ const Board = ({ match }) => {
           <CardColumn
             column={wentWellColumn}
             columnClasses={clsx(classes.columnTitle, classes.wentWell)}
-            cards={wentWell}
-            order={wentWellOrder}
             boardId={match.params.id}
+            cardMap={cardMap}
+            order={wentWellOrder}
           />
           <CardColumn
             column={toImproveColumn}
             columnClasses={clsx(classes.columnTitle, classes.toImprove)}
-            cards={toImprove}
-            order={toImproveOrder}
             boardId={match.params.id}
+            cardMap={cardMap}
+            order={toImproveOrder}
           />
           <CardColumn
             column={actionItemsColumn}
             columnClasses={clsx(classes.columnTitle, classes.actionItems)}
-            cards={actionItems}
-            order={actionItemsOrder}
             boardId={match.params.id}
+            cardMap={cardMap}
+            order={actionItemsOrder}
           />
         </Grid>
       </Fragment>

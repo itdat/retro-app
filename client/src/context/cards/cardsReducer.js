@@ -14,7 +14,7 @@ export default (state, action) => {
     case GET_CARDS:
       return {
         ...state,
-        ...action.payload,
+        cards: action.payload,
         loading: false,
       };
     case REMOVE_CARD:
@@ -30,6 +30,7 @@ export default (state, action) => {
         loading: false,
       };
     case ADD_CARD:
+      console.log("ABC");
       return {
         ...state,
         [action.payload.column]: [

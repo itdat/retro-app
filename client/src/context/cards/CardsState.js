@@ -14,9 +14,7 @@ import {
 
 const CardsState = (props) => {
   const initialState = {
-    wentWell: [],
-    toImprove: [],
-    actionItems: [],
+    cards: [],
     error: null,
     addingColumn: null,
   };
@@ -24,25 +22,12 @@ const CardsState = (props) => {
   const [state, dispatch] = useReducer(cardsReducer, initialState);
 
   // Get cards (demo id: 5fa24556601b321aa80ee16c)
-  const getCards = async (id) => {
+  const getCards = async (boardId) => {
     try {
-      const wentWellRes = await axios.get(
-        `/api/cards?board=${id}&column=wentWell`
-      );
-      const toImproveRes = await axios.get(
-        `/api/cards?board=${id}&column=toImprove`
-      );
-      const actionItemsRes = await axios.get(
-        `/api/cards?board=${id}&column=actionItems`
-      );
-
+      const res = await axios.get(`/api/boards/${boardId}/cards`);
       dispatch({
         type: GET_CARDS,
-        payload: {
-          wentWell: wentWellRes.data,
-          toImprove: toImproveRes.data,
-          actionItems: actionItemsRes.data,
-        },
+        payload: res.data,
       });
     } catch (err) {
       dispatch({
@@ -66,7 +51,9 @@ const CardsState = (props) => {
         type: ADD_CARD,
         payload: res.data,
       });
+      console.log("CHECKKKK");
     } catch (err) {
+      console.log(err);
       dispatch({
         type: CARD_ERROR,
         payload: err.response.data.msg,
@@ -148,9 +135,7 @@ const CardsState = (props) => {
   return (
     <CardsContext.Provider
       value={{
-        wentWell: state.wentWell,
-        toImprove: state.toImprove,
-        actionItems: state.actionItems,
+        cards: state.cards,
         error: state.error,
         addingColumn: state.addingColumn,
         getCards,

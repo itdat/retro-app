@@ -2,7 +2,7 @@ import React, { useReducer } from "react";
 import axios from "axios";
 import ColumnsContext from "./columnsContext";
 import columnsReducer from "./columnsReducer";
-import { GET_COLUMN_ORDERS, MOVE_CARD, COLUMN_ERROR } from "../types";
+import { GET_COLUMN_ORDER, MOVE_CARD, COLUMN_ERROR } from "../types";
 
 const ColumnsState = (props) => {
   const initialState = {
@@ -17,19 +17,41 @@ const ColumnsState = (props) => {
   // Get column orders by board Id
   const getColumnOrders = async (id) => {
     try {
-      const wentWellRes = await axios.get(`/api/boards/${id}/columns/wentWell`);
-      const toImproveRes = await axios.get(
-        `/api/boards/${id}/columns/toImprove`
-      );
-      const actionItemsRes = await axios.get(
-        `/api/boards/${id}/columns/actionItems`
-      );
+      const res = await axios.get(`/api/boards/${id}/columns/wentWell`);
+      console.log(`BUGGGG ${res}`);
       dispatch({
-        type: GET_COLUMN_ORDERS,
+        type: GET_COLUMN_ORDER,
         payload: {
-          wentWellOrder: wentWellRes.data,
-          toImproveOrder: toImproveRes.data,
-          actionItemsOrder: actionItemsRes.data,
+          wentWellOrder: res.data,
+        },
+      });
+    } catch (err) {
+      dispatch({
+        type: COLUMN_ERROR,
+        payload: err.response.data.msg,
+      });
+    }
+    try {
+      const res = await axios.get(`/api/boards/${id}/columns/toImprove`);
+      dispatch({
+        type: GET_COLUMN_ORDER,
+        payload: {
+          toImproveOrder: res.data,
+        },
+      });
+    } catch (err) {
+      console.log(err.response);
+      dispatch({
+        type: COLUMN_ERROR,
+        payload: err.response.data.msg,
+      });
+    }
+    try {
+      const res = await axios.get(`/api/boards/${id}/columns/actionItems`);
+      dispatch({
+        type: GET_COLUMN_ORDER,
+        payload: {
+          actionItemsOrder: res.data,
         },
       });
     } catch (err) {

@@ -5,10 +5,6 @@ const CardSchema = mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: "boards",
   },
-  column: {
-    type: String,
-    required: true,
-  },
   content: {
     type: String,
     required: true,
