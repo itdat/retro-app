@@ -6,7 +6,7 @@ import {
   REMOVE_CARD,
   SET_ADDING_COLUMN,
   UPDATE_CARD,
-  SORT_CARDS,
+  UPDATE_COLUMN,
   CLEAR_CARD_ERROR,
 } from "../types";
 
@@ -23,6 +23,12 @@ export default (state, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+
+    case UPDATE_COLUMN:
+      return {
+        ...state,
+        [action.payload.name + "Order"]: action.payload.list,
       };
     case REMOVE_CARD:
       return {
@@ -67,11 +73,6 @@ export default (state, action) => {
       return {
         ...state,
         addingColumn: action.payload,
-      };
-    case SORT_CARDS:
-      return {
-        ...state,
-        [action.payload.name]: action.payload.list,
       };
     default:
       return state;

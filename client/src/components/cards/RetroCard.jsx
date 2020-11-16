@@ -23,11 +23,7 @@ import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 
 const Container = styled.div`
-  &:first-child {
-    padding-top: 0.5rem;
-  }
-  padding: 0 0.5rem;
-  padding-bottom: 0.5rem;
+  padding: 0.25rem 0.5rem;
 `;
 
 const useStyles = makeStyles((theme) => ({

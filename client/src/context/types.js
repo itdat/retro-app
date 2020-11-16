@@ -20,8 +20,8 @@ export const REMOVE_CARD = "REMOVE_CARD";
 export const UPDATE_CARD = "UPDATE_CARD";
 export const CARD_ERROR = "CARD_ERROR";
 export const SET_ADDING_COLUMN = "SET_ADDING_COLUMN";
-export const SORT_CARDS = "SORT_CARDS";
 export const CLEAR_CARD_ERROR = "CLEAR_CARD_ERROR";
+export const UPDATE_COLUMN = "UPDATE_COLUMN";
 
 export const GET_BOARDS = "GET_BOARDS";
 export const ADD_BOARD = "ADD_BOARD";
@@ -31,4 +31,3 @@ export const BOARD_MESSAGE = "BOARD_MESSAGE";
 
 export const GET_COLUMN_ORDER = "GET_COLUMN_ORDER";
 export const MOVE_CARD = "MOVE_CARD";
-export const COLUMN_ERROR = "COLUMN_ERROR";

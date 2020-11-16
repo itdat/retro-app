@@ -67,7 +67,6 @@ const ColumnsState = (props) => {
       const res = await axios.get(
         `/api/boards/${boardId}/columns/${destColumn}/${destIndex}?srcId=${srcId}`
       );
-      console.log(res);
       let payload = {};
       if (res.data.source) {
         payload[res.data.source.name] = res.data.source.list;

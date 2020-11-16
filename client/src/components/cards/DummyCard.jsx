@@ -14,8 +14,7 @@ import CardsContext from "../../context/cards/cardsContext";
 import styled from "styled-components";
 
 const Container = styled.div`
-  padding: 0.5rem;
-  padding-bottom: 0;
+  padding: 0.25rem 0.5rem;
 `;
 
 const useStyles = makeStyles((theme) => ({

@@ -46,7 +46,7 @@ const Board = (props) => {
   const confirmDialogContext = useContext(ConfirmDialogContext);
   const alertContext = useContext(AlertContext);
 
-  const { error, removeCard, clearError } = cardsContext;
+  const { error, removeCard, clearError, moveCard } = cardsContext;
   const { loadUser } = authContext;
   const { hideConfirm, confirm } = confirmDialogContext;
   const { setAlert } = alertContext;
@@ -91,30 +91,32 @@ const Board = (props) => {
   };
 
   const onDragEnd = async (result) => {
-    // await moveCard({
-    //   boardId: match.params.id,
-    //   destColumn: result.destination.droppableId,
-    //   destIndex: result.destination.index,
-    //   srcId: result.draggableId,
-    // });
+    await moveCard({
+      boardId: props.match.params.id,
+      destColumn: result.destination.droppableId,
+      destIndex: result.destination.index,
+      srcColumn: result.source.droppableId,
+      srcIndex: result.source.index,
+      srcId: result.draggableId,
+    });
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Fragment>
-        <Grid container className={classes.container}>
-          <Grid item>
-            <Link
-              to="/boards"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <Button variant="outlined" startIcon={<ArrowBack />}>
-                Back to boards
-              </Button>
-            </Link>
-          </Grid>
+    <Fragment>
+      <Grid container className={classes.container}>
+        <Grid item>
+          <Link
+            to="/boards"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Button variant="outlined" startIcon={<ArrowBack />}>
+              Back to boards
+            </Button>
+          </Link>
         </Grid>
-        <Grid container spacing={1}>
+      </Grid>
+      <Grid container spacing={1}>
+        <DragDropContext onDragEnd={onDragEnd}>
           <CardColumn
             column={wentWellColumn}
             columnClasses={clsx(classes.columnTitle, classes.wentWell)}
@@ -130,9 +132,9 @@ const Board = (props) => {
             columnClasses={clsx(classes.columnTitle, classes.actionItems)}
             {...props}
           />
-        </Grid>
-      </Fragment>
-    </DragDropContext>
+        </DragDropContext>
+      </Grid>
+    </Fragment>
   );
 };
 

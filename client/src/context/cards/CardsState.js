@@ -11,6 +11,8 @@ import {
   SET_ADDING_COLUMN,
   GET_COLUMN_ORDER,
   CLEAR_CARD_ERROR,
+  MOVE_CARD,
+  UPDATE_COLUMN,
 } from "../types";
 
 const CardsState = (props) => {
@@ -137,6 +139,60 @@ const CardsState = (props) => {
     });
   };
 
+  // Move card
+  const moveCard = async ({
+    boardId,
+    destColumn,
+    destIndex,
+    srcColumn,
+    srcIndex,
+    srcId,
+  }) => {
+    let srcColumnIds = [...state[srcColumn + "Order"]];
+    if (srcColumn === destColumn) {
+      let tmp = srcColumnIds[srcIndex];
+      srcColumnIds[srcIndex] = srcColumnIds[destIndex];
+      srcColumnIds[destIndex] = tmp;
+      dispatch({
+        type: UPDATE_COLUMN,
+        payload: { name: srcColumn, list: srcColumnIds },
+      });
+    } else {
+      let destColumnIds = [...state[destColumn + "Order"]];
+      srcColumnIds.splice(srcIndex, 1);
+      destColumnIds.splice(destIndex, 0, srcId);
+
+      dispatch({
+        type: UPDATE_COLUMN,
+        payload: { name: srcColumn, list: srcColumnIds },
+      });
+
+      dispatch({
+        type: UPDATE_COLUMN,
+        payload: { name: destColumn, list: destColumnIds },
+      });
+    }
+
+    // dispatch({
+    //   type: MOVE_CARD,
+    //   payload,
+    // });
+    // try {
+    //   const res = await axios.get(
+    //     `/api/boards/${boardId}/columns/${destColumn}/${destIndex}?srcId=${srcId}`
+    //   );
+    //   let payload = {};
+    //   if (res.data.source) {
+    //     payload[res.data.source.name] = res.data.source.list;
+    //   }
+    //   payload[res.data.destination.name] = res.data.destination.list;
+    //   console.log(payload);
+    //   dispatch({ type: MOVE_CARD, payload });
+    // } catch (err) {
+    //   dispatch({ type: CARD_ERROR, payload: err.response.msg });
+    // }
+  };
+
   // Clear error
   const clearError = () => dispatch({ type: CLEAR_CARD_ERROR });
 
@@ -153,6 +209,7 @@ const CardsState = (props) => {
         getColumnOrder,
         removeCard,
         addCard,
+        moveCard,
         updateCard,
         setAddingColumn,
         clearError,
