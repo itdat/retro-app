@@ -21,6 +21,7 @@ export const UPDATE_CARD = "UPDATE_CARD";
 export const CARD_ERROR = "CARD_ERROR";
 export const SET_ADDING_COLUMN = "SET_ADDING_COLUMN";
 export const SORT_CARDS = "SORT_CARDS";
+export const CLEAR_CARD_ERROR = "CLEAR_CARD_ERROR";
 
 export const GET_BOARDS = "GET_BOARDS";
 export const ADD_BOARD = "ADD_BOARD";

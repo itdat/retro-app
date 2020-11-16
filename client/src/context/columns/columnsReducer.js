@@ -1,4 +1,9 @@
-import { GET_COLUMN_ORDER, MOVE_CARD, COLUMN_ERROR } from "../types";
+import {
+  GET_COLUMN_ORDER,
+  ADD_CARD_TO_COLUMN,
+  MOVE_CARD,
+  COLUMN_ERROR,
+} from "../types";
 
 // eslint-disable-next-line
 export default (state, action) => {
@@ -7,6 +12,14 @@ export default (state, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case ADD_CARD_TO_COLUMN:
+      return {
+        ...state,
+        [action.payload.column + "Order"]: [
+          action.payload.id,
+          ...state[action.payload.column + "Order"],
+        ],
       };
     case MOVE_CARD:
       return {

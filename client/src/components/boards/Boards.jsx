@@ -9,6 +9,7 @@ import FormInputDialog from "./FormInputDialog";
 
 import AuthContext from "../../context/auth/authContext";
 import BoardsContext from "../../context/boards/boardsContext";
+import CardsContext from "../../context/cards/cardsContext";
 import AlertContext from "../../context/alert/alertContext";
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
 
@@ -33,6 +34,9 @@ const Boards = ({ match }) => {
   const boardsContext = useContext(BoardsContext);
   const { boards, message, getBoards, addBoard, removeBoard } = boardsContext;
 
+  const cardsContext = useContext(CardsContext);
+  const { clearError } = cardsContext;
+
   const alertContext = useContext(AlertContext);
   const { setAlert } = alertContext;
 
@@ -51,8 +55,9 @@ const Boards = ({ match }) => {
   useEffect(() => {
     loadUser();
     getBoards();
+    clearError();
     // eslint-disable-next-line
-  }, []);
+  }, [match]);
 
   // Listen if error occurs
   useEffect(() => {

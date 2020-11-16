@@ -9,19 +9,23 @@ import {
   REMOVE_CARD,
   UPDATE_CARD,
   SET_ADDING_COLUMN,
-  SORT_CARDS,
+  GET_COLUMN_ORDER,
+  CLEAR_CARD_ERROR,
 } from "../types";
 
 const CardsState = (props) => {
   const initialState = {
     cards: [],
+    wentWellOrder: [],
+    toImproveOrder: [],
+    actionItemsOrder: [],
     error: null,
     addingColumn: null,
   };
 
   const [state, dispatch] = useReducer(cardsReducer, initialState);
 
-  // Get cards (demo id: 5fa24556601b321aa80ee16c)
+  // Get cards
   const getCards = async (boardId) => {
     try {
       const res = await axios.get(`/api/boards/${boardId}/cards`);
@@ -37,21 +41,48 @@ const CardsState = (props) => {
     }
   };
 
+  // Get orders of cards
+  // Get column orders by board Id
+  const getColumnOrder = async (boardId, columnName) => {
+    try {
+      const res = await axios.get(
+        `/api/boards/${boardId}/columns/${columnName}`
+      );
+      dispatch({
+        type: GET_COLUMN_ORDER,
+        payload: {
+          [columnName + "Order"]: res.data,
+        },
+      });
+    } catch (err) {
+      dispatch({
+        type: CARD_ERROR,
+        payload: err.response.data.msg,
+      });
+    }
+  };
+
   // Add card
-  const addCard = async (card) => {
+  const addCard = async (data) => {
+    const { content, column, board } = data;
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
-
     try {
-      const res = await axios.post("/api/cards", card, config);
+      const res = await axios.post(
+        `/api/boards/${board}/cards`,
+        { content, column },
+        config
+      );
       dispatch({
         type: ADD_CARD,
-        payload: res.data,
+        payload: {
+          card: res.data,
+          column,
+        },
       });
-      console.log("CHECKKKK");
     } catch (err) {
       console.log(err);
       dispatch({
@@ -106,31 +137,8 @@ const CardsState = (props) => {
     });
   };
 
-  // Sort cards
-  const sortCards = async (column, cards, order) => {
-    const reorder = async () => {
-      console.log(cards);
-      console.log(order);
-      let orderedCards = [...Array(order.length)];
-      for (const card of cards) {
-        const index = await order.findIndex(
-          (id) => String(id) === String(card._id)
-        );
-        orderedCards[index] = card;
-      }
-      return orderedCards;
-    };
-    let value = await reorder();
-    console.log(value);
-    // console.log(`${column} : ${value}`);
-    dispatch({
-      type: SORT_CARDS,
-      payload: {
-        name: column,
-        list: value,
-      },
-    });
-  };
+  // Clear error
+  const clearError = () => dispatch({ type: CLEAR_CARD_ERROR });
 
   return (
     <CardsContext.Provider
@@ -138,12 +146,16 @@ const CardsState = (props) => {
         cards: state.cards,
         error: state.error,
         addingColumn: state.addingColumn,
+        wentWellOrder: state.wentWellOrder,
+        toImproveOrder: state.toImproveOrder,
+        actionItemsOrder: state.actionItemsOrder,
         getCards,
+        getColumnOrder,
         removeCard,
         addCard,
         updateCard,
         setAddingColumn,
-        sortCards,
+        clearError,
       }}
     >
       {props.children}

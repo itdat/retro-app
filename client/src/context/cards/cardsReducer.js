@@ -2,10 +2,12 @@ import {
   ADD_CARD,
   CARD_ERROR,
   GET_CARDS,
+  GET_COLUMN_ORDER,
   REMOVE_CARD,
   SET_ADDING_COLUMN,
   UPDATE_CARD,
   SORT_CARDS,
+  CLEAR_CARD_ERROR,
 } from "../types";
 
 // eslint-disable-next-line
@@ -16,6 +18,11 @@ export default (state, action) => {
         ...state,
         cards: action.payload,
         loading: false,
+      };
+    case GET_COLUMN_ORDER:
+      return {
+        ...state,
+        ...action.payload,
       };
     case REMOVE_CARD:
       return {
@@ -30,12 +37,12 @@ export default (state, action) => {
         loading: false,
       };
     case ADD_CARD:
-      console.log("ABC");
       return {
         ...state,
-        [action.payload.column]: [
-          action.payload,
-          ...state[action.payload.column],
+        cards: [action.payload.card, ...state.cards],
+        [action.payload.column + "Order"]: [
+          action.payload.card._id,
+          ...state[action.payload.column + "Order"],
         ],
         loading: false,
       };
@@ -50,6 +57,11 @@ export default (state, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case CLEAR_CARD_ERROR:
+      return {
+        ...state,
+        error: null,
       };
     case SET_ADDING_COLUMN:
       return {

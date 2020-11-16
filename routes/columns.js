@@ -24,7 +24,6 @@ router.get("/:name", auth, async (req, res) => {
     if (!column) {
       return res.status(404).json({ msg: "Column not found" });
     }
-    console.log("Columns are loaded");
     return res.json(column.list);
   } catch (err) {
     console.error(err.message);

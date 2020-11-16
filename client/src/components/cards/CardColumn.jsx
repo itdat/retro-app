@@ -42,11 +42,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CardColumn = ({ column, columnClasses, boardId, cardMap, order }) => {
+const CardColumn = ({ match, column, columnClasses }) => {
   const classes = useStyles();
 
   const cardsContext = useContext(CardsContext);
-  const { addingColumn, setAddingColumn } = cardsContext;
+  const {
+    cards,
+    [column.type + "Order"]: order,
+    addingColumn,
+    setAddingColumn,
+    getCards,
+    getColumnOrder,
+  } = cardsContext;
 
   const addNewCard = () => {
     if (addingColumn !== column.type) {
@@ -55,12 +62,28 @@ const CardColumn = ({ column, columnClasses, boardId, cardMap, order }) => {
   };
 
   const [loading, setLoading] = useState(true);
+  const [columnCards, setColumnCards] = useState([]);
 
   useEffect(() => {
-    if (cardMap.size === order.length && cardMap.size) {
+    getCards(match.params.id);
+    getColumnOrder(match.params.id, column.type);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    (async () => {
+      let newColumnCards = [];
+      for (const id of order) {
+        const card = await cards.find(
+          (card) => String(card._id) === String(id)
+        );
+        newColumnCards.push(card);
+      }
+      setColumnCards(newColumnCards);
       setLoading(false);
-    }
-  }, [cardMap, order]);
+    })();
+  }, [cards, order]);
 
   return (
     <Grid item xs={12} md={4} container wrap="nowrap" direction="column">
@@ -82,24 +105,22 @@ const CardColumn = ({ column, columnClasses, boardId, cardMap, order }) => {
         {/* Dummy card when adding */}
         <DummyCard
           card={{ content: "", column: column.type }}
-          boardId={boardId}
+          boardId={match.params.id}
         />
         {/* Card list */}
         <Droppable droppableId={column.type}>
           {(provided) => (
             <Container {...provided.droppableProps} ref={provided.innerRef}>
-              {!loading ? (
-                order.map((id, index) => {
+              {loading ? (
+                <Typography>Loading...</Typography>
+              ) : (
+                columnCards.map((card, index) => {
                   return (
-                    <RetroCard
-                      key={id}
-                      card={cardMap.get(String(id))}
-                      index={index}
-                    />
+                    card && (
+                      <RetroCard key={card._id} card={card} index={index} />
+                    )
                   );
                 })
-              ) : (
-                <div>Loading...</div>
               )}
               {provided.placeholder}
             </Container>

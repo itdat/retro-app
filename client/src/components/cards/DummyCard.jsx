@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 
 const DummyCard = ({ boardId, card }) => {
   const cardsContext = useContext(CardsContext);
-
   const { addCard, addingColumn, setAddingColumn } = cardsContext;
 
   const classes = useStyles();
@@ -54,12 +53,12 @@ const DummyCard = ({ boardId, card }) => {
   // Handle confirmation of changes (save or edit)
   const handleModifyClick = async () => {
     if (edit && addingColumn === card.column) {
-      const newCard = {
+      const data = {
         content: value,
         column: card.column,
         board: boardId,
       };
-      await addCard(newCard);
+      await addCard(data);
       setAddingColumn(null);
     }
     setEdit(!edit);

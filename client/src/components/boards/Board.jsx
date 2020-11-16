@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,7 +13,6 @@ import CardsContext from "../../context/cards/cardsContext";
 import AuthContext from "../../context/auth/authContext";
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
 import AlertContext from "../../context/alert/alertContext";
-import ColumnsContext from "../../context/columns/columnsContext";
 
 import { CONFIRM_DELETE_CARD } from "../notification/types";
 
@@ -39,67 +38,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Board = ({ match }) => {
+const Board = (props) => {
   const classes = useStyles();
 
   const cardsContext = useContext(CardsContext);
   const authContext = useContext(AuthContext);
   const confirmDialogContext = useContext(ConfirmDialogContext);
   const alertContext = useContext(AlertContext);
-  const columnsContext = useContext(ColumnsContext);
 
-  const { cards, error, getCards, removeCard } = cardsContext;
+  const { error, removeCard, clearError } = cardsContext;
   const { loadUser } = authContext;
   const { hideConfirm, confirm } = confirmDialogContext;
   const { setAlert } = alertContext;
 
-  const {
-    wentWellOrder,
-    toImproveOrder,
-    actionItemsOrder,
-    getColumnOrders,
-    moveCard,
-  } = columnsContext;
-
-  // useEffect(() => {
-  //   getCards(match.params.id);
-  //   // eslint-disable-next-line
-  // }, [wentWellOrder, toImproveOrder, actionItemsOrder]);
-
-  // Hashmap for cards
-  const [cardMap, setCardMap] = useState(new Map());
-
-  const mapToHashMap = async (cards, ids) => {
-    let newCardMap = new Map(cardMap);
-    await (async () => {
-      for (const id of ids) {
-        const card = await cards.find((c) => String(c._id) === String(id));
-        newCardMap.set(String(id), card);
-      }
-    })();
-    setCardMap(newCardMap);
-  };
-
   // Initialize in the fisrt load
   useEffect(() => {
-    const prepareData = async () => {
-      await loadUser();
-      await getCards(match.params.id);
-      await getColumnOrders(match.params.id);
-    };
-    try {
-      prepareData();
-    } catch (err) {
-      console.error(err);
-    }
+    clearError();
+    loadUser();
     // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    mapToHashMap(cards, wentWellOrder);
-    mapToHashMap(cards, toImproveOrder);
-    mapToHashMap(cards, actionItemsOrder);
-  }, [cards, wentWellOrder, toImproveOrder, actionItemsOrder]);
 
   // Delete card listener
   useEffect(() => {
@@ -134,12 +91,12 @@ const Board = ({ match }) => {
   };
 
   const onDragEnd = async (result) => {
-    await moveCard({
-      boardId: match.params.id,
-      destColumn: result.destination.droppableId,
-      destIndex: result.destination.index,
-      srcId: result.draggableId,
-    });
+    // await moveCard({
+    //   boardId: match.params.id,
+    //   destColumn: result.destination.droppableId,
+    //   destIndex: result.destination.index,
+    //   srcId: result.draggableId,
+    // });
   };
 
   return (
@@ -161,23 +118,17 @@ const Board = ({ match }) => {
           <CardColumn
             column={wentWellColumn}
             columnClasses={clsx(classes.columnTitle, classes.wentWell)}
-            boardId={match.params.id}
-            cardMap={cardMap}
-            order={wentWellOrder}
+            {...props}
           />
           <CardColumn
             column={toImproveColumn}
             columnClasses={clsx(classes.columnTitle, classes.toImprove)}
-            boardId={match.params.id}
-            cardMap={cardMap}
-            order={toImproveOrder}
+            {...props}
           />
           <CardColumn
             column={actionItemsColumn}
             columnClasses={clsx(classes.columnTitle, classes.actionItems)}
-            boardId={match.params.id}
-            cardMap={cardMap}
-            order={actionItemsOrder}
+            {...props}
           />
         </Grid>
       </Fragment>
