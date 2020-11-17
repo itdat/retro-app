@@ -123,7 +123,11 @@ const CardsState = (props) => {
     };
 
     try {
-      const res = await axios.put(`/api/cards/${card._id}`, card, config);
+      const res = await axios.put(
+        `/api/boards/${card.board}/cards/${card._id}`,
+        card,
+        config
+      );
       dispatch({ type: UPDATE_CARD, payload: res.data });
     } catch (err) {
       dispatch({ type: CARD_ERROR, payload: err.response.msg });

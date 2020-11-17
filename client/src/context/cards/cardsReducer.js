@@ -55,8 +55,10 @@ export default (state, action) => {
     case UPDATE_CARD:
       return {
         ...state,
-        [action.payload.column]: state[action.payload.column].map((card) =>
-          card._id === action.payload._id ? action.payload : card
+        cards: state.cards.map((card) =>
+          String(card._id) === String(action.payload._id)
+            ? action.payload
+            : card
         ),
       };
     case CARD_ERROR:

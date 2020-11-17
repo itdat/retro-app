@@ -114,7 +114,7 @@ router.post(
   }
 );
 
-// @route   PUT api/cards/:id
+// @route   PUT /api/boards/:boardId/cards/:id
 // @desc    Update card
 // @access  Private
 router.put("/:id", auth, async (req, res) => {
