@@ -89,6 +89,28 @@ const AuthState = (props) => {
     }
   };
 
+  // Get data using o-auth
+  const loginOAuth = async (data) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const res = await axios.post("/api/auth/social-media", data, config);
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data,
+      });
+      loadUser();
+    } catch (err) {
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: err.response.data.msg,
+      });
+    }
+  };
+
   // Logout
   const logout = () => dispatch({ type: LOGOUT });
 
@@ -106,6 +128,7 @@ const AuthState = (props) => {
         loadUser,
         register,
         login,
+        loginOAuth,
         logout,
         clearErrors,
       }}

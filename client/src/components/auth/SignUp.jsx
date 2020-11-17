@@ -16,6 +16,8 @@ import Container from "@material-ui/core/Container";
 import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
 
+import GoogleLogin from "react-google-login";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -56,7 +58,13 @@ export default function SignUp(props) {
   const authContext = useContext(AuthContext);
 
   const { setAlert } = alertContext;
-  const { register, error, clearErrors, isAuthenticated } = authContext;
+  const {
+    loginOAuth,
+    register,
+    error,
+    clearErrors,
+    isAuthenticated,
+  } = authContext;
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -92,6 +100,15 @@ export default function SignUp(props) {
       username,
       password,
     });
+  };
+
+  const responseGoogle = (response) => {
+    const data = {
+      name: response.profileObj.name,
+      provider: "Google",
+      token: response.googleId,
+    };
+    loginOAuth(data);
   };
 
   return (
@@ -163,11 +180,19 @@ export default function SignUp(props) {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/sign-in" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>
+          {/* Login with Google */}
+          <GoogleLogin
+            clientId="1059772356052-qbun9dqircn3k2l7lkq9g2vi3mpqef80.apps.googleusercontent.com"
+            buttonText="Login with Google"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={"single_host_origin"}
+          />
         </form>
       </div>
       <Box mt={5}>

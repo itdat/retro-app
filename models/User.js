@@ -7,12 +7,18 @@ const UserSchema = mongoose.Schema({
   },
   username: {
     type: String,
-    required: true,
     unique: true,
   },
   password: {
     type: String,
-    required: true,
+  },
+  token: {
+    type: String,
+    unique: true,
+  },
+  provider: {
+    type: String,
+    unique: true,
   },
   date: {
     type: Date,

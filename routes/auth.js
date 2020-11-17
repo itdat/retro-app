@@ -67,4 +67,58 @@ router.post(
   }
 );
 
+// @route   POST api/auth/social-media
+// @desc    Auth user & get token
+// @access  Public
+router.post("/social-media", async (req, res) => {
+  const { name, provider, token } = req.body;
+  try {
+    let user = await User.findOne({ provider, token });
+    if (user) {
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        {
+          expiresIn: 3600000,
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } else {
+      let user = new User({
+        name,
+        token,
+        provider,
+      });
+      await user.save();
+      const payload = {
+        user: {
+          id: user._id,
+        },
+      };
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        {
+          expiresIn: 3600000,
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    }
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;
