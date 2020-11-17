@@ -144,15 +144,16 @@ router.put("/:id", auth, async (req, res) => {
 // @access  Private
 router.delete("/:id", auth, async (req, res) => {
   // Assert for boardId
-  if (!req.query.boardId) {
-    return res.status(400).json({ msg: "Can't delete card in invalid board" });
-  }
   let boardId;
   try {
-    boardId = mongoose.Types.ObjectId(req.query.boardId);
+    boardId = mongoose.Types.ObjectId(req.body.boardId);
   } catch (err) {
     console.error(err.message);
-    return res.status(400).json({ msg: "Can't delete card in invalid board" });
+    return res.status(400).json({ msg: "Board id is not valid" });
+  }
+  const board = await Board.findById(boardId);
+  if (!board) {
+    return res.status(404).json({ msg: "Board not found" });
   }
 
   // Assert for cardId
@@ -168,10 +169,11 @@ router.delete("/:id", auth, async (req, res) => {
     if (!card) return res.status(404).json({ msg: "Card not found" });
     // Delete card by cardId
     await Card.findByIdAndRemove(cardId);
+
     // Get all columns of boardId
     const columns = await Column.find({ board: boardId });
     // Delete id in columns
-    const deleteIdInColumns = async () => {
+    await (async () => {
       for (const column of columns) {
         const updatedList = column.list.filter((id) => id != cardId);
         await Column.findByIdAndUpdate(
@@ -180,8 +182,7 @@ router.delete("/:id", auth, async (req, res) => {
           { new: true }
         );
       }
-    };
-    await deleteIdInColumns();
+    })();
     res.json({ msg: "Card removed" });
   } catch (err) {
     console.error(err.message);

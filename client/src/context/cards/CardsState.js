@@ -100,10 +100,9 @@ const CardsState = (props) => {
   };
 
   // Remove card
-  const removeCard = async (id) => {
+  const removeCard = async (boardId, id) => {
     try {
-      await axios.delete(`/api/cards/${id}`);
-
+      await axios.delete(`/api/boards/${boardId}/cards/${id}`);
       dispatch({
         type: REMOVE_CARD,
         payload: id,

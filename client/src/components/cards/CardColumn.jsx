@@ -75,7 +75,6 @@ const CardColumn = ({ match, column, columnClasses }) => {
 
   // Update hashmap when cards changes
   useEffect(() => {
-    console.log("Cards change");
     let newCardMap = new Map();
     cards.map((card) => newCardMap.set(String(card._id), card));
     setCardMap(newCardMap);

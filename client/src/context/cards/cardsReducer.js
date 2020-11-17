@@ -24,7 +24,6 @@ export default (state, action) => {
         ...state,
         ...action.payload,
       };
-
     case UPDATE_COLUMN:
       return {
         ...state,
@@ -33,12 +32,8 @@ export default (state, action) => {
     case REMOVE_CARD:
       return {
         ...state,
-        wentWell: state.wentWell.filter((card) => card._id !== action.payload),
-        toImprove: state.toImprove.filter(
-          (card) => card._id !== action.payload
-        ),
-        actionItems: state.actionItems.filter(
-          (card) => card._id !== action.payload
+        cards: state.cards.filter(
+          (card) => String(card._id) !== String(action.payload)
         ),
         loading: false,
       };

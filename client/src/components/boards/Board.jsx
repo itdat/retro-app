@@ -65,7 +65,7 @@ const Board = (props) => {
       confirm.message.type === CONFIRM_DELETE_CARD &&
       confirm.result === true
     ) {
-      removeCard(confirm.message.idCard);
+      removeCard(props.match.params.id, confirm.message.idCard);
       hideConfirm();
     }
     // eslint-disable-next-line
