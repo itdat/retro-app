@@ -62,28 +62,24 @@ const CardColumn = ({ match, column, columnClasses }) => {
   };
 
   const [loading, setLoading] = useState(true);
-  const [columnCards, setColumnCards] = useState([]);
+  const [cardMap, setCardMap] = useState(new Map());
 
   useEffect(() => {
-    getCards(match.params.id);
-    getColumnOrder(match.params.id, column.type);
+    (async () => {
+      await getCards(match.params.id);
+      await getColumnOrder(match.params.id, column.type);
+      setLoading(false);
+    })();
     // eslint-disable-next-line
   }, []);
 
+  // Update hashmap when cards changes
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      let newColumnCards = [];
-      for (const id of order) {
-        const card = await cards.find(
-          (card) => String(card._id) === String(id)
-        );
-        newColumnCards.push(card);
-      }
-      setColumnCards(newColumnCards);
-      setLoading(false);
-    })();
-  }, [cards, order]);
+    console.log("Cards change");
+    let newCardMap = new Map();
+    cards.map((card) => newCardMap.set(String(card._id), card));
+    setCardMap(newCardMap);
+  }, [cards]);
 
   return (
     <Grid item xs={12} md={4} container wrap="nowrap" direction="column">
@@ -112,15 +108,18 @@ const CardColumn = ({ match, column, columnClasses }) => {
           {(provided) => (
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {loading ? (
-                <Typography>Loading...</Typography>
+                <Typography>Loading data...</Typography>
               ) : (
-                columnCards.map((card, index) => {
-                  return (
-                    card && (
-                      <RetroCard key={card._id} card={card} index={index} />
+                order.map(
+                  (id, index) =>
+                    cardMap.get(String(id)) && (
+                      <RetroCard
+                        key={id}
+                        card={cardMap.get(String(id))}
+                        index={index}
+                      />
                     )
-                  );
-                })
+                )
               )}
               {provided.placeholder}
             </Container>

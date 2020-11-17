@@ -11,7 +11,6 @@ import {
   SET_ADDING_COLUMN,
   GET_COLUMN_ORDER,
   CLEAR_CARD_ERROR,
-  MOVE_CARD,
   UPDATE_COLUMN,
 } from "../types";
 
