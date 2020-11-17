@@ -61,7 +61,7 @@ router.post(
         }
       );
     } catch (err) {
-      console.log(err.message);
+      console.error(err.message);
       res.status(500).send("Server Error");
     }
   }
@@ -71,7 +71,7 @@ router.post(
 // @desc    Auth user & get token
 // @access  Public
 router.post("/social-media", async (req, res) => {
-  const { name, provider, token } = req.body;
+  const { name, username, provider, token } = req.body;
   try {
     let user = await User.findOne({ provider, token });
     if (user) {
@@ -94,6 +94,7 @@ router.post("/social-media", async (req, res) => {
     } else {
       let user = new User({
         name,
+        username,
         token,
         provider,
       });
@@ -116,7 +117,7 @@ router.post("/social-media", async (req, res) => {
       );
     }
   } catch (err) {
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 });

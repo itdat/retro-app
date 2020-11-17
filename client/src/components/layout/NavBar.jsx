@@ -65,6 +65,7 @@ const NavBar = ({ openDrawer }) => {
                     .match(/\b(\w)/g)
                     .map((ch, i) => {
                       if (i < 2) return ch;
+                      else return "";
                     })
                     .join("")
                 : "@"}

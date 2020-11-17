@@ -103,8 +103,10 @@ export default function SignUp(props) {
   };
 
   const responseGoogle = (response) => {
+    console.log(response);
     const data = {
       name: response.profileObj.name,
+      username: response.profileObj.email,
       provider: "Google",
       token: response.googleId,
     };
