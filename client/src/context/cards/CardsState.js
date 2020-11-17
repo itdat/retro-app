@@ -147,29 +147,37 @@ const CardsState = (props) => {
     srcIndex,
     srcId,
   }) => {
-    let srcColumnIds = [...state[srcColumn + "Order"]];
-    if (srcColumn === destColumn) {
-      let tmp = srcColumnIds[srcIndex];
-      srcColumnIds[srcIndex] = srcColumnIds[destIndex];
-      srcColumnIds[destIndex] = tmp;
-      dispatch({
-        type: UPDATE_COLUMN,
-        payload: { name: srcColumn, list: srcColumnIds },
-      });
-    } else {
-      let destColumnIds = [...state[destColumn + "Order"]];
-      srcColumnIds.splice(srcIndex, 1);
-      destColumnIds.splice(destIndex, 0, srcId);
+    try {
+      axios.get(
+        `/api/boards/${boardId}/columns/${destColumn}/${destIndex}?srcId=${srcId}&srcColumn=${srcColumn}`
+      );
 
-      dispatch({
-        type: UPDATE_COLUMN,
-        payload: { name: srcColumn, list: srcColumnIds },
-      });
+      let srcColumnIds = [...state[srcColumn + "Order"]];
+      if (srcColumn === destColumn) {
+        let tmp = srcColumnIds[srcIndex];
+        srcColumnIds[srcIndex] = srcColumnIds[destIndex];
+        srcColumnIds[destIndex] = tmp;
+        dispatch({
+          type: UPDATE_COLUMN,
+          payload: { name: srcColumn, list: srcColumnIds },
+        });
+      } else {
+        let destColumnIds = [...state[destColumn + "Order"]];
+        srcColumnIds.splice(srcIndex, 1);
+        destColumnIds.splice(destIndex, 0, srcId);
 
-      dispatch({
-        type: UPDATE_COLUMN,
-        payload: { name: destColumn, list: destColumnIds },
-      });
+        dispatch({
+          type: UPDATE_COLUMN,
+          payload: { name: srcColumn, list: srcColumnIds },
+        });
+
+        dispatch({
+          type: UPDATE_COLUMN,
+          payload: { name: destColumn, list: destColumnIds },
+        });
+      }
+    } catch (err) {
+      dispatch({ type: CARD_ERROR, payload: err.response.msg });
     }
 
     // dispatch({

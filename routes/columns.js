@@ -31,7 +31,7 @@ router.get("/:name", auth, async (req, res) => {
   }
 });
 
-// @route   GET /api/boards/:boardId/columns/:name/:index?srcId
+// @route   GET /api/boards/:boardId/columns/:name/:index?srcId&srcColumn
 // @desc    Move card srcId to destName column at destIndex
 // @access  Private
 router.get("/:name/:index", auth, async (req, res) => {
@@ -57,7 +57,7 @@ router.get("/:name/:index", auth, async (req, res) => {
 
     const srcColumn = await Column.findOne({
       board: boardId,
-      name: card.column,
+      name: req.query.srcColumn,
     });
 
     const desColumn = await Column.findOne({
