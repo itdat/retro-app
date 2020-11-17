@@ -22,7 +22,13 @@ router.get("/:name", auth, async (req, res) => {
       name: req.params.name,
     });
     if (!column) {
-      return res.status(404).json({ msg: "Column not found" });
+      const initColumn = new Column({
+        board: boardId,
+        name: req.params.name,
+        list: [],
+      });
+      await initColumn.save();
+      return res.json([]);
     }
     return res.json(column.list);
   } catch (err) {
