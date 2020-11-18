@@ -10,6 +10,7 @@ import {
   REMOVE_BOARD,
   UPDATE_BOARD,
   CLEAR_BOARD_MESSAGE,
+  CLEAR_BOARDS,
 } from "../types";
 
 const BoardsState = (props) => {
@@ -130,6 +131,11 @@ const BoardsState = (props) => {
     }
   };
 
+  // Clear boards
+  const clearBoards = () => {
+    dispatch({ type: CLEAR_BOARDS });
+  };
+
   const clearBoardMessage = () => {
     dispatch({ type: CLEAR_BOARD_MESSAGE });
   };
@@ -146,6 +152,7 @@ const BoardsState = (props) => {
         updateBoard,
         removeBoard,
         clearBoardMessage,
+        clearBoards,
       }}
     >
       {props.children}

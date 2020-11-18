@@ -32,7 +32,14 @@ const Boards = ({ match }) => {
   const { loadUser, isAuthenticated } = authContext;
 
   const boardsContext = useContext(BoardsContext);
-  const { boards, message, getBoards, addBoard, removeBoard } = boardsContext;
+  const {
+    boards,
+    message,
+    getBoards,
+    addBoard,
+    removeBoard,
+    clearBoards,
+  } = boardsContext;
 
   const cardsContext = useContext(CardsContext);
   const { clearError } = cardsContext;
@@ -53,6 +60,7 @@ const Boards = ({ match }) => {
 
   // Load data when component did mount
   useEffect(() => {
+    clearBoards();
     clearError();
     loadUser();
     if (isAuthenticated) getBoards();

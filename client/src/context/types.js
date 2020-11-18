@@ -30,6 +30,7 @@ export const REMOVE_BOARD = "REMOVE_BOARD";
 export const UPDATE_BOARD = "UPDATE_BOARD";
 export const BOARD_MESSAGE = "BOARD_MESSAGE";
 export const CLEAR_BOARD_MESSAGE = "CLEAR_BOARD_MESSAGE";
+export const CLEAR_BOARDS = "CLEAR_BOARDS";
 
 export const GET_COLUMN_ORDER = "GET_COLUMN_ORDER";
 export const MOVE_CARD = "MOVE_CARD";
