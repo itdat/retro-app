@@ -38,6 +38,7 @@ router.get("/", async (req, res) => {
 router.post(
   "/",
   [
+    auth,
     [
       check("content", "Content is required").not().isEmpty(),
       check(
@@ -116,7 +117,7 @@ router.post(
 // @route   PUT /api/boards/:boardId/cards/:id
 // @desc    Update card
 // @access  Private
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { content } = req.body;
   const updatedContent = {};
   if (content) updatedContent.content = content;
@@ -141,7 +142,7 @@ router.put("/:id", async (req, res) => {
 // @route   DELETE api/cards/:id?board=...
 // @desc    Delete card
 // @access  Private
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   // Assert for boardId
   let boardId;
   try {

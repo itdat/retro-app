@@ -131,14 +131,6 @@ const Board = (props) => {
           </Link>
         </Grid>
         <Grid item>
-          <Typography align="center" variant="h4">
-            {currentBoard ? currentBoard.name : "Board name"}
-          </Typography>
-          <Typography align="center">
-            {currentBoard ? currentBoard.context : "Board context"}
-          </Typography>
-        </Grid>
-        <Grid item>
           <CopyToClipboard
             text={state.value}
             onCopy={() => {
@@ -151,6 +143,14 @@ const Board = (props) => {
             </IconButton>
           </CopyToClipboard>
         </Grid>
+      </Grid>
+      <Grid style={{ marginBottom: "1rem" }}>
+        <Typography align="center" variant="h4">
+          {currentBoard ? currentBoard.name : "Board name"}
+        </Typography>
+        <Typography align="center">
+          {currentBoard ? currentBoard.context : "Board context"}
+        </Typography>
       </Grid>
       <Grid container spacing={1}>
         <DragDropContext onDragEnd={onDragEnd}>
