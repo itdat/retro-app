@@ -5,7 +5,7 @@ import AuthContext from "../../context/auth/authContext";
 
 const LeftDrawer = ({ open, setOpen }) => {
   const authContext = useContext(AuthContext);
-  const { isAuthenticated } = authContext;
+  const { isAuthenticated, logout } = authContext;
 
   return (
     <Drawer open={open} onClose={() => setOpen(false)}>
@@ -15,7 +15,22 @@ const LeftDrawer = ({ open, setOpen }) => {
             <Link to="/">Home</Link>
           </ListItemText>
         </ListItem>
-        {!isAuthenticated && (
+        {isAuthenticated ? (
+          <Fragment>
+            <ListItem button onClick={() => setOpen(false)}>
+              <ListItemText>
+                <Link to="/boards">Boards</Link>
+              </ListItemText>
+            </ListItem>
+            <ListItem button onClick={() => setOpen(false)}>
+              <ListItemText>
+                <Link to="#" onClick={logout}>
+                  Logout
+                </Link>
+              </ListItemText>
+            </ListItem>
+          </Fragment>
+        ) : (
           <Fragment>
             <ListItem button onClick={() => setOpen(false)}>
               <ListItemText>

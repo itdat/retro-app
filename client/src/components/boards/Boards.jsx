@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import { Grid, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -29,7 +29,7 @@ const Boards = ({ match }) => {
 
   // Using contexts
   const authContext = useContext(AuthContext);
-  const { loadUser } = authContext;
+  const { loadUser, isAuthenticated } = authContext;
 
   const boardsContext = useContext(BoardsContext);
   const { boards, message, getBoards, addBoard, removeBoard } = boardsContext;
@@ -53,11 +53,11 @@ const Boards = ({ match }) => {
 
   // Load data when component did mount
   useEffect(() => {
-    loadUser();
-    getBoards();
     clearError();
+    loadUser();
+    if (isAuthenticated) getBoards();
     // eslint-disable-next-line
-  }, [match]);
+  }, [match, isAuthenticated]);
 
   // Listen if error occurs
   useEffect(() => {
@@ -80,7 +80,7 @@ const Boards = ({ match }) => {
     // eslint-disable-next-line
   }, [confirm]);
 
-  return (
+  return isAuthenticated ? (
     <Switch>
       <Route path={`${match.path}/:id`} component={Board} />
       <Route
@@ -116,6 +116,8 @@ const Boards = ({ match }) => {
         )}
       />
     </Switch>
+  ) : (
+    <Redirect to={`/sign-in`} />
   );
 };
 

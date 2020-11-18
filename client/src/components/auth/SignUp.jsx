@@ -17,6 +17,7 @@ import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
 
 import GoogleLogin from "react-google-login";
+import FacebookLogin from "react-facebook-login";
 
 function Copyright() {
   return (
@@ -114,6 +115,17 @@ export default function SignUp(props) {
     loginOAuth(data);
   };
 
+  const responseFacebook = (response) => {
+    const data = {
+      name: response.name,
+      username: response.id,
+      photo: response.picture.data.url,
+      provider: "Facebook",
+      token: response.id,
+    };
+    loginOAuth(data);
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -195,6 +207,12 @@ export default function SignUp(props) {
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
             cookiePolicy={"single_host_origin"}
+          />
+          <FacebookLogin
+            appId="391794955521742"
+            autoLoad={true}
+            fields="name,email,picture"
+            callback={responseFacebook}
           />
         </form>
       </div>

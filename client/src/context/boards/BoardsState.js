@@ -8,6 +8,7 @@ import {
   GET_BOARDS,
   REMOVE_BOARD,
   UPDATE_BOARD,
+  CLEAR_BOARD_MESSAGE,
 } from "../types";
 
 const BoardsState = (props) => {
@@ -112,6 +113,10 @@ const BoardsState = (props) => {
     }
   };
 
+  const clearBoardMessage = () => {
+    dispatch({ type: CLEAR_BOARD_MESSAGE });
+  };
+
   return (
     <BoardsContext.Provider
       value={{
@@ -121,6 +126,7 @@ const BoardsState = (props) => {
         addBoard,
         updateBoard,
         removeBoard,
+        clearBoardMessage,
       }}
     >
       {props.children}

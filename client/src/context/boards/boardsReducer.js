@@ -4,6 +4,7 @@ import {
   BOARD_MESSAGE,
   REMOVE_BOARD,
   UPDATE_BOARD,
+  CLEAR_BOARD_MESSAGE,
 } from "../types";
 
 // eslint-disable-next-line
@@ -38,6 +39,11 @@ export default (state, action) => {
       return {
         ...state,
         message: action.payload,
+      };
+    case CLEAR_BOARD_MESSAGE:
+      return {
+        ...state,
+        message: null,
       };
     default:
       return state;
