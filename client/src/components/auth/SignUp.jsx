@@ -210,7 +210,7 @@ export default function SignUp(props) {
           />
           <FacebookLogin
             appId="391794955521742"
-            autoLoad={true}
+            autoLoad={false}
             fields="name,email,picture"
             callback={responseFacebook}
           />
