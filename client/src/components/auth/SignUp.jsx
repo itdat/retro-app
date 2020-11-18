@@ -107,6 +107,7 @@ export default function SignUp(props) {
     const data = {
       name: response.profileObj.name,
       username: response.profileObj.email,
+      photo: response.profileObj.imageUrl,
       provider: "Google",
       token: response.googleId,
     };

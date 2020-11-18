@@ -71,7 +71,7 @@ const BoardCard = ({ board }) => {
               component="img"
               alt="Contemplative Reptile"
               height="140"
-              image="https://picsum.photos/300"
+              image="/cover.jpg"
               title="Contemplative Reptile"
             />
             <CardContent>
@@ -104,7 +104,7 @@ const BoardCard = ({ board }) => {
                 component="img"
                 alt="Contemplative Reptile"
                 height="140"
-                image="https://picsum.photos/300"
+                image="/cover.jpg"
                 title="Contemplative Reptile"
               />
               <CardContent>

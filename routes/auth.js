@@ -71,7 +71,7 @@ router.post(
 // @desc    Auth user & get token
 // @access  Public
 router.post("/social-media", async (req, res) => {
-  const { name, username, provider, token } = req.body;
+  const { name, username, photo, provider, token } = req.body;
   try {
     let user = await User.findOne({ provider, token });
     if (user) {
@@ -95,6 +95,7 @@ router.post("/social-media", async (req, res) => {
       let user = new User({
         name,
         username,
+        photo,
         token,
         provider,
       });

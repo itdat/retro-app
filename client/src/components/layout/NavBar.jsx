@@ -59,7 +59,7 @@ const NavBar = ({ openDrawer }) => {
             </Hidden>
           </Grid>
           <Grid item>
-            <Avatar>
+            <Avatar src={user && user.photo ? user.photo : ""}>
               {user
                 ? user.name
                     .match(/\b(\w)/g)
