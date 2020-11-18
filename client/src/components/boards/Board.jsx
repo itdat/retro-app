@@ -86,6 +86,7 @@ const Board = (props) => {
       name: currentBoard.name,
       context: currentBoard.context,
     });
+    // eslint-disable-next-line
   }, [currentBoard]);
 
   // Delete card listener
