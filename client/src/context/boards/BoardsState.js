@@ -6,6 +6,7 @@ import {
   ADD_BOARD,
   BOARD_MESSAGE,
   GET_BOARDS,
+  GET_BOARD,
   REMOVE_BOARD,
   UPDATE_BOARD,
   CLEAR_BOARD_MESSAGE,
@@ -14,6 +15,7 @@ import {
 const BoardsState = (props) => {
   const initialState = {
     boards: [],
+    currentBoard: {},
     message: null,
   };
 
@@ -25,6 +27,21 @@ const BoardsState = (props) => {
       const res = await axios.get(`/api/boards`);
       dispatch({
         type: GET_BOARDS,
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: BOARD_MESSAGE,
+        payload: err.response.data.msg,
+      });
+    }
+  };
+
+  const getBoard = async (boardId) => {
+    try {
+      const res = await axios.get(`/api/boards/${boardId}`);
+      dispatch({
+        type: GET_BOARD,
         payload: res.data,
       });
     } catch (err) {
@@ -121,8 +138,10 @@ const BoardsState = (props) => {
     <BoardsContext.Provider
       value={{
         boards: state.boards,
+        currentBoard: state.currentBoard,
         message: state.message,
         getBoards,
+        getBoard,
         addBoard,
         updateBoard,
         removeBoard,

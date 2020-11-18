@@ -1,5 +1,6 @@
 import {
   GET_BOARDS,
+  GET_BOARD,
   ADD_BOARD,
   BOARD_MESSAGE,
   REMOVE_BOARD,
@@ -15,6 +16,11 @@ export default (state, action) => {
         ...state,
         boards: action.payload,
         loading: false,
+      };
+    case GET_BOARD:
+      return {
+        ...state,
+        currentBoard: action.payload,
       };
     case ADD_BOARD:
       return {

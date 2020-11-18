@@ -1,14 +1,17 @@
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Button } from "@material-ui/core";
+import { Grid, Typography, IconButton } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
+import Share from "@material-ui/icons/Share";
 import { DragDropContext } from "react-beautiful-dnd";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import CardColumn from "../cards/CardColumn";
 
 // Contexts
+import BoardsContext from "../../context/boards/boardsContext";
 import CardsContext from "../../context/cards/cardsContext";
 import AuthContext from "../../context/auth/authContext";
 import ConfirmDialogContext from "../../context/confirmDialog/confirmDialogContext";
@@ -45,16 +48,24 @@ const Board = (props) => {
   const authContext = useContext(AuthContext);
   const confirmDialogContext = useContext(ConfirmDialogContext);
   const alertContext = useContext(AlertContext);
+  const boardsContext = useContext(BoardsContext);
 
+  const { currentBoard, getBoard } = boardsContext;
   const { error, removeCard, clearError, moveCard } = cardsContext;
   const { loadUser } = authContext;
   const { hideConfirm, confirm } = confirmDialogContext;
   const { setAlert } = alertContext;
 
+  const [state, setState] = useState({
+    value: String(window.location.href),
+    copied: false,
+  });
+
   // Initialize in the fisrt load
   useEffect(() => {
     clearError();
     loadUser();
+    getBoard(props.match.params.id);
     // eslint-disable-next-line
   }, []);
 
@@ -103,16 +114,42 @@ const Board = (props) => {
 
   return (
     <Fragment>
-      <Grid container className={classes.container}>
-        <Grid item>
+      <Grid
+        container
+        alignItems="center"
+        justify="space-between"
+        className={classes.container}
+      >
+        <Grid item style={{ marginRight: "0.8rem" }}>
           <Link
             to="/boards"
             style={{ textDecoration: "none", color: "inherit" }}
           >
-            <Button variant="outlined" startIcon={<ArrowBack />}>
-              Back to boards
-            </Button>
+            <IconButton>
+              <ArrowBack />
+            </IconButton>
           </Link>
+        </Grid>
+        <Grid item>
+          <Typography align="center" variant="h4">
+            {currentBoard ? currentBoard.name : "Board name"}
+          </Typography>
+          <Typography align="center">
+            {currentBoard ? currentBoard.context : "Board context"}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <CopyToClipboard
+            text={state.value}
+            onCopy={() => {
+              setAlert("Board URL is copied");
+              setState({ ...state, copied: true });
+            }}
+          >
+            <IconButton>
+              <Share />
+            </IconButton>
+          </CopyToClipboard>
         </Grid>
       </Grid>
       <Grid container spacing={1}>

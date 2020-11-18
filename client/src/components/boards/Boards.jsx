@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import { Grid, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";

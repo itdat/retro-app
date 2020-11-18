@@ -20,6 +20,19 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+// @route   GET api/boards/:id
+// @desc    Get all users boards
+// @access  Private
+router.get("/:id", async (req, res) => {
+  try {
+    const board = await Board.findOne({ _id: req.params.id });
+    res.json(board);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 // @route   POST api/boards
 // @desc    Add new board
 // @access  Private
