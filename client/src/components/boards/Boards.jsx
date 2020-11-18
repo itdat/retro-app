@@ -60,7 +60,7 @@ const Boards = ({ match }) => {
 
   // Load data when component did mount
   useEffect(() => {
-    clearBoards();
+    if (!isAuthenticated) clearBoards();
     clearError();
     loadUser();
     if (isAuthenticated) getBoards();

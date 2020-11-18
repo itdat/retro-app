@@ -82,10 +82,15 @@ const CardColumn = ({ match, column, columnClasses }) => {
 
   return (
     <Grid item xs={12} md={4} container wrap="nowrap" direction="column">
-      <Card className={columnClasses}>
+      <Card variant="outlined" className={columnClasses}>
         <Grid container justify="center" alignItems="center">
           <Grid item className={classes.columnTitle}>
-            <Typography variant="h5" align="center" color="inherit">
+            <Typography
+              style={{ fontWeight: "bold" }}
+              variant="h5"
+              align="center"
+              color="inherit"
+            >
               {column.title}
             </Typography>
           </Grid>

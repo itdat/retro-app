@@ -27,19 +27,22 @@ const useStyles = makeStyles((theme) => ({
   },
   columnTitle: {
     marginTop: "0.2rem",
-    padding: "1rem",
+    padding: "0.5rem",
   },
   wentWell: {
     backgroundColor: theme.palette.success.main,
-    color: theme.palette.text.primary,
+    fontWeight: "bold",
+    color: "rgba(0,0,0,0.54)",
   },
   toImprove: {
     backgroundColor: theme.palette.warning.main,
-    color: theme.palette.text.primary,
+    fontWeight: "bold",
+    color: "rgba(0,0,0,0.54)",
   },
   actionItems: {
     backgroundColor: theme.palette.info.main,
-    color: theme.palette.text.primary,
+    fontWeight: "bold",
+    color: "rgba(0,0,0,0.54)",
   },
 }));
 
