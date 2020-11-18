@@ -5,9 +5,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
+import { Link as LinkRoute } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,20 +16,7 @@ import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
 
 import GoogleLogin from "react-google-login";
-import FacebookLogin from "react-facebook-login";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -195,15 +181,31 @@ export default function SignUp(props) {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/sign-in" variant="body2">
+              <LinkRoute
+                style={{ color: "inherit" }}
+                to="/sign-in"
+                variant="body2"
+              >
                 Already have an account? Sign in
-              </Link>
+              </LinkRoute>
             </Grid>
           </Grid>
           {/* Login with Google */}
           <GoogleLogin
             clientId="1059772356052-qbun9dqircn3k2l7lkq9g2vi3mpqef80.apps.googleusercontent.com"
             buttonText="Login with Google"
+            render={(renderProps) => (
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                color="secondary"
+                style={{ marginTop: "0.5rem" }}
+              >
+                Login with Google
+              </Button>
+            )}
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
             cookiePolicy={"single_host_origin"}
@@ -213,12 +215,22 @@ export default function SignUp(props) {
             autoLoad={false}
             fields="name,email,picture"
             callback={responseFacebook}
+            buttonText="Login with Facebook"
+            render={(renderProps) => (
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                color="primary"
+                style={{ marginTop: "0.5rem" }}
+              >
+                Login with Facebook
+              </Button>
+            )}
           />
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }
