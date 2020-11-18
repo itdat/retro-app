@@ -2,9 +2,11 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Typography, IconButton } from "@material-ui/core";
+import { Grid, Typography, IconButton, TextField } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Share from "@material-ui/icons/Share";
+import Edit from "@material-ui/icons/Edit";
+import Save from "@material-ui/icons/Save";
 import { DragDropContext } from "react-beautiful-dnd";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -50,7 +52,7 @@ const Board = (props) => {
   const alertContext = useContext(AlertContext);
   const boardsContext = useContext(BoardsContext);
 
-  const { currentBoard, getBoard } = boardsContext;
+  const { currentBoard, getBoard, updateBoard } = boardsContext;
   const { error, removeCard, clearError, moveCard } = cardsContext;
   const { loadUser } = authContext;
   const { hideConfirm, confirm } = confirmDialogContext;
@@ -61,6 +63,12 @@ const Board = (props) => {
     copied: false,
   });
 
+  const [edit, setEdit] = useState(false);
+  const [value, setValue] = useState({
+    name: "",
+    context: "",
+  });
+
   // Initialize in the fisrt load
   useEffect(() => {
     clearError();
@@ -68,6 +76,14 @@ const Board = (props) => {
     getBoard(props.match.params.id);
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    setValue({
+      ...value,
+      name: currentBoard.name,
+      context: currentBoard.context,
+    });
+  }, [currentBoard]);
 
   // Delete card listener
   useEffect(() => {
@@ -99,6 +115,20 @@ const Board = (props) => {
   const actionItemsColumn = {
     title: "Action Items",
     type: "actionItems",
+  };
+
+  const handleChange = (e) => {
+    setValue({ ...value, [e.target.name]: e.target.value });
+  };
+
+  const handleEdit = async (e) => {
+    if (!edit) {
+      setEdit(!edit);
+    } else {
+      const updatedBoard = { ...currentBoard, ...value };
+      await updateBoard(updatedBoard);
+      setEdit(!edit);
+    }
   };
 
   const onDragEnd = async (result) => {
@@ -144,13 +174,39 @@ const Board = (props) => {
           </CopyToClipboard>
         </Grid>
       </Grid>
-      <Grid style={{ marginBottom: "1rem" }}>
-        <Typography align="center" variant="h4">
-          {currentBoard ? currentBoard.name : "Board name"}
-        </Typography>
-        <Typography align="center">
-          {currentBoard ? currentBoard.context : "Board context"}
-        </Typography>
+      <Grid alignItems="center" justify="center" container>
+        <Grid item style={{ marginBottom: "1rem" }}>
+          {edit ? (
+            <Fragment>
+              <TextField
+                name="name"
+                fullWidth
+                inputProps={{ style: { fontSize: "1.8rem" } }}
+                value={value.name}
+                autoFocus
+                onChange={handleChange}
+              />
+              <TextField
+                name="context"
+                fullWidth
+                value={value.context}
+                onChange={handleChange}
+              />
+            </Fragment>
+          ) : (
+            <Fragment>
+              <Typography align="center" variant="h4">
+                {value.name}
+              </Typography>
+              <Typography align="center">{value.context}</Typography>
+            </Fragment>
+          )}
+        </Grid>
+        <Grid item>
+          <IconButton onClick={handleEdit}>
+            {edit ? <Save fontSize="small" /> : <Edit fontSize="small" />}
+          </IconButton>
+        </Grid>
       </Grid>
       <Grid container spacing={1}>
         <DragDropContext onDragEnd={onDragEnd}>

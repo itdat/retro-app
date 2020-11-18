@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   list: {
     backgroundColor: "#ebecf0",
     marginTop: "5px",
-    height: "80vh",
+    height: "70vh",
     overflow: "auto",
     borderRadius: "5px",
   },
