@@ -80,7 +80,7 @@ const Boards = ({ match }) => {
     // eslint-disable-next-line
   }, [confirm]);
 
-  return isAuthenticated ? (
+  return (
     <Switch>
       <Route path={`${match.path}/:id`} component={Board} />
       <Route
@@ -116,8 +116,6 @@ const Boards = ({ match }) => {
         )}
       />
     </Switch>
-  ) : (
-    <Redirect to={`/sign-in`} />
   );
 };
 

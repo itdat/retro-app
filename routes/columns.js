@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 // @route   GET /api/boards/:boardId/columns/:name
 // @desc    Get ordered card Ids
 // @access  Private
-router.get("/:name", auth, async (req, res) => {
+router.get("/:name", async (req, res) => {
   try {
     let boardId;
     try {
